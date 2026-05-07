@@ -71,9 +71,18 @@ async def get_data() -> Card:
             last_three_cards.append(card.id)
             return card
 
-
-
-
+@app.get("/all_cards")
+def read_all_cards(skip: str = "-1", limit: int = 5) -> list[Card]:
+    query_cards = demo_cards
+    # skip card id if skip is provided
+    skip_list = skip.split("-") if skip != "-1" else []
+    if skip_list:
+        for skip_id in skip_list:
+            query_cards.pop(int(skip_id), None)
+    # limit the number of cards returned if limit is provided
+    if limit != -1:
+        query_cards = dict(list(query_cards.items())[:limit])
+    return list(query_cards.values())
 
 @app.get("/cards/{card_id}")
 def read_card(card_id: int) -> Card | None:
