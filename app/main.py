@@ -1,9 +1,11 @@
 # .venv\Scripts\Activate.ps1
+# fastapi dev (to launch the server)
 
 from fastapi import FastAPI
 from typing import Annotated
 from pydantic import BaseModel
 from random import shuffle, randint
+from fastapi.responses import HTMLResponse
 
 app = FastAPI()
 
@@ -24,16 +26,57 @@ demo_cards = {
     8: Card(id=8, front="id8: This is a sentence with a rhetorical question, which can be used to make a point or provoke thought.", back="(Notes and translation)"),
     9: Card(id=9, front="id9: This is a sentence with a hyperbole, which can be used for emphasis or humor.", back="(Notes and translation)"),
 }
+error_card = Card(id=-1, front="Error: Invalid card ID", back="Please provide a valid card ID.")
 
 order = list(demo_cards.keys())
 shuffle(order)
 last_three_cards = []
-    
-@app.get("/")
-def read_root()-> Card:
+
+@app.get("/", response_class=HTMLResponse)
+async def root():
+    return """
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>API Tester</title>
+    </head>
+    <body>
+        <h1>API Test Interface</h1>
+        <button onclick="fetchData()">Select random card</button>
+        <pre id="result">Click the button to fetch card data</pre>
+        
+        <script>
+            async function fetchData() {
+                const result = document.getElementById('result');
+                result.textContent = 'Loading...';
+                
+                try {
+                    const response = await fetch('/api/data');
+                    const data = await response.json();
+                    result.textContent = JSON.stringify(data, null, 2);
+                } catch (error) {
+                    result.textContent = 'Error: ' + error.message;
+                }
+            }
+        </script>
+    </body>
+    </html>
+    """
+
+@app.get("/api/data")
+async def get_data() -> Card:
     while True:
         card = demo_cards[order[randint(0, len(order)-1)]]
         if card.id not in last_three_cards:
             last_three_cards.append(card.id)
             return card
 
+
+
+
+
+@app.get("/cards/{card_id}")
+def read_card(card_id: int) -> Card | None:
+    if card_id not in set(order):
+        return error_card
+    return demo_cards.get(card_id)
