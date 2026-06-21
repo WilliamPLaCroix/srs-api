@@ -49,6 +49,14 @@ CI/CD
 
 ---
 
+## Project Structure
+
+```text
+
+$(cat TREE.md)
+
+```
+---
 ## Work Packages
 
 ### WP1: Data model and SRS core
