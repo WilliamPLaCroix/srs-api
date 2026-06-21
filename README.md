@@ -1,4 +1,4 @@
-# Bookwurm Adaptive Language Reader
+# SRS Adaptive Language Reader
 
 A language learning app built around Stephen Krashen's input hypothesis: that acquisition happens fastest when reading material contains roughly 1% unknown vocabulary; just enough challenge to stretch comprehension without losing meaning.
 
