@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
 class CardSchema(BaseModel):
-    id: int
-    front: str
-    back: str
+    id: int = None
+    front: str = None
+    back: str = None

@@ -1,5 +1,5 @@
 from pydantic import BaseModel
 
 class DeckSchema(BaseModel):
-    id: int
-    name: str
+    id: int = None
+    name: str = None
