@@ -28,3 +28,9 @@ class CardRepository:
             .filter(CardModel.deck_id == deck_id)
             .all()
         )
+    
+    def delete(self, card_id: int):
+        card = self.get(card_id)
+        if card:
+            self.db.delete(card)
+            self.db.commit()

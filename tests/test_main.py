@@ -6,7 +6,7 @@ client = TestClient(app)
 Base.metadata.create_all(bind=engine)
 
 def test_app_starts():
-    response = client.get("/docs")
+    response = client.get("/")
     assert response.status_code == 200
 
 def test_cards_endpoint_exists():

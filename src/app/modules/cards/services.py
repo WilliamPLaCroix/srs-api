@@ -26,3 +26,8 @@ class CardService:
 
     def get_cards_for_deck(self, deck_id: int):
         return self.repo.list_by_deck(deck_id)
+    
+    def delete_card(self, card_id: int):
+        if not self.repo.get(card_id):
+            raise ValueError("Card not found")
+        self.repo.delete(card_id)

@@ -35,3 +35,11 @@ def get_card(card_id: int, service: CardService = Depends(get_service)):
 @router.get("/deck/{deck_id}", response_model=list[CardRead])
 def get_cards(deck_id: int, service: CardService = Depends(get_service)):
     return service.get_cards_for_deck(deck_id)
+
+@router.delete("/{card_id}")
+def delete_card(card_id: int, service: CardService = Depends(get_service)):
+    try:
+        service.delete_card(card_id)
+        return {"detail": "Card deleted"}
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))

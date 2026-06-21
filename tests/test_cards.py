@@ -66,3 +66,15 @@ def test_get_cards_by_deck(db):
     cards = service.get_cards_for_deck(99)
 
     assert len(cards) == 2
+
+def test_delete_card(db):
+    repo = CardRepository(db)
+    service = CardService(repo)
+
+    card = service.create_card(CardCreate(front="To delete", back="Delete me", deck_id=1))
+    card_id = card.id
+
+    service.delete_card(card_id)
+
+    with pytest.raises(ValueError):
+        service.get_card(card_id)
