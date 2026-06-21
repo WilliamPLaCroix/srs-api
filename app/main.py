@@ -5,16 +5,16 @@ from fastapi import FastAPI
 from typing import Annotated
 from pydantic import BaseModel
 from fastapi.responses import HTMLResponse
+from sqlalchemy import select
+from random import choice
 
 # app imports
-from app.services.cards import get_card_by_id
+from app.modules.cards.services import get_card_by_id
+from app.db.models import Card
+from app.db.database import SessionLocal
+from app.modules.cards.create import CardCreate
 
 app = FastAPI()
-
-class Card(BaseModel):
-    id: int
-    front: str
-    back: str
 
 @app.get("/", response_class=HTMLResponse)
 async def root():
@@ -47,6 +47,7 @@ async def root():
     </html>
     """
 
+# TODO this function needs to be changed to pull from the database instead of the demo cards OR "/api/data" should be moved to get("/cards")
 @app.get("/api/data")
 async def get_data() -> Card:
     while True:
@@ -55,29 +56,47 @@ async def get_data() -> Card:
             last_three_cards.append(card.id)
             return card
 
-@app.get("/all_cards")
-def read_all_cards(skip: str = "-1", limit: int = 5) -> list[Card]:
-    query_cards = demo_cards
-    # skip card id if skip is provided
-    skip_list = skip.split("-") if skip != "-1" else []
-    if skip_list:
-        for skip_id in skip_list:
-            query_cards.pop(int(skip_id), None)
-    # limit the number of cards returned if limit is provided
-    if limit != -1:
-        query_cards = dict(list(query_cards.items())[:limit])
-    return list(query_cards.values())
+@app.get("/cards")
+def get_all_cards():
+    db = SessionLocal()
+
+    cards = db.execute(select(Card)).scalars().all()
+    return cards
 
 @app.get("/cards/{card_id}")
-def read_card(card_id: int) -> Card | None:
-    if card_id not in set(order):
-        return error_card
-    return demo_cards.get(card_id)
+def get_card(card_id: int):
+    db = SessionLocal()
+
+    card = db.get(Card, card_id)
+
+    if not card:
+        return {"error": "card not found"}
+
+    return card
 
 @app.get("/cards/random")
-def read_random_card() -> Card:
-    return demo_cards[order[0]]
+def get_random_card():
+    db = SessionLocal()
+
+    cards = db.execute(select(Card)).scalars().all()
+
+    if not cards:
+        return {"error": "no cards in database"}
+
+    return choice(cards)
 
 @app.get("/cards/db")
 def read_card_db(card_id: int) -> Card | None:
     return get_card_by_id(card_id)
+
+@app.post("/cards")
+def create_card(card: CardCreate):
+    db = SessionLocal()
+
+    new_card = Card(front=card.front, back=card.back)
+
+    db.add(new_card)
+    db.commit()
+    db.refresh(new_card)
+
+    return new_card
