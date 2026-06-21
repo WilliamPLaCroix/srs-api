@@ -6,3 +6,39 @@ dependencies = [] # fill if/when we stop using requirements.txt
 
 [tool.fastapi]
 entrypoint = "app.main:app"
+
+# -----------------------
+# TESTING (pytest)
+# -----------------------
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+# -----------------------
+# LINTING (ruff)
+# -----------------------
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+ignore = []
+
+# -----------------------
+# TYPE CHECKING (mypy)
+# -----------------------
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+ignore_missing_imports = true
+
+# -----------------------
+# OPTIONAL: coverage
+# -----------------------
+[tool.coverage.run]
+source = ["app"]
+
+[tool.coverage.report]
+show_missing = true

@@ -49,16 +49,42 @@ CI/CD
 
 ---
 
-## Project Structure
-
-```
+## Current Project Directory Structure
 
 <!-- TREE_START -->
-Old tree will be replaced
+
+```text
+app
+├── core
+│   └── dependencies.py
+├── db
+│   ├── database.py
+│   └── models.py
+├── modules
+│   ├── cards
+│   │   ├── model.py
+│   │   ├── repository.py
+│   │   ├── router.py
+│   │   ├── schemas.py
+│   │   └── services.py
+│   ├── decks
+│   │   ├── model.py
+│   │   ├── repository.py
+│   │   ├── router.py
+│   │   ├── schemas.py
+│   │   └── services.py
+│   └── reviews
+│       ├── model.py
+│       ├── repository.py
+│       ├── router.py
+│       ├── schemas.py
+│       └── services.py
+└── main.py
+```
 <!-- TREE_END -->
 
-```
 ---
+
 ## Work Packages
 
 ### WP1: Data model and SRS core
