@@ -37,3 +37,13 @@ jobs:
         with:
           name: project-tree
           path: TREE.md
+
+      - name: Inject tree into README
+        run: |
+          python scripts/tree.py > TREE.md
+
+          awk '/<!-- TREE_START -->/{print; system("cat TREE.md"); skip=1; next}
+              /<!-- TREE_END -->/{skip=0}
+              skip==0{print}' README.md > README.tmp
+
+          mv README.tmp README.md
