@@ -1,5 +1,5 @@
 from pydantic import BaseModel
 
-class Review(BaseModel):
+class ReviewSchema(BaseModel):
     card_id: int
     rating: int
