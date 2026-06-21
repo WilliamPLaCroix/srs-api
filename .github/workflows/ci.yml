@@ -28,9 +28,3 @@ jobs:
 
       - name: Run tests
         run: pytest
-
-      - name: Generate project tree
-        run: python scripts/tree.py > TREE.md
-
-      - name: Update README
-        run: python scripts/insert_tree.py
