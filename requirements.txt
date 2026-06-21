@@ -4,3 +4,4 @@ uvicorn==0.42.0
 SQLAlchemy==2.0.51
 psycopg2==2.9.12
 pytest==9.1.1
+testcontainers[postgres]==4.14.2
