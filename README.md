@@ -54,37 +54,29 @@ CI/CD
 ```text
 app
 ├── core
-│   ├── __init__.py
 │   └── dependencies.py
 ├── db
-│   ├── __init__.py
 │   ├── database.py
 │   └── models.py
 ├── modules
 │   ├── cards
-│   │   ├── __init__.py
 │   │   ├── model.py
 │   │   ├── repository.py
 │   │   ├── router.py
 │   │   ├── schemas.py
 │   │   └── services.py
 │   ├── decks
-│   │   ├── __init__.py
 │   │   ├── model.py
 │   │   ├── repository.py
 │   │   ├── router.py
 │   │   ├── schemas.py
 │   │   └── services.py
-│   ├── reviews
-│   │   ├── __init__.py
-│   │   ├── model.py
-│   │   ├── repository.py
-│   │   ├── router.py
-│   │   ├── schemas.py
-│   │   └── services.py
-│   ├── __init__.py
-│   └── router_template.py
-├── __init__.py
+│   └── reviews
+│       ├── model.py
+│       ├── repository.py
+│       ├── router.py
+│       ├── schemas.py
+│       └── services.py
 └── main.py
 ```
 <!-- TREE_END -->
