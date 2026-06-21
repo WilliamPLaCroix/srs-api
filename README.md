@@ -49,6 +49,8 @@ CI/CD
 
 ---
 
+## Current Project Directory Structure
+
 <!-- TREE_START -->
 
 ```text
