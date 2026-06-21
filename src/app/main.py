@@ -7,6 +7,8 @@ from pydantic import BaseModel
 from fastapi.responses import HTMLResponse
 from sqlalchemy import select
 from random import choice
+from fastapi.responses import RedirectResponse
+from fastapi.openapi.docs import get_swagger_ui_html
 
 # app imports
 from app.modules.cards.services import get_card_by_id
@@ -14,38 +16,16 @@ from app.db.models import Card
 from app.db.database import SessionLocal
 from app.modules.cards.create import create_card
 
-app = FastAPI()
+app = FastAPI(docs_url="/",title="Spaced Repetition Flashcard API")
 
-@app.get("/", response_class=HTMLResponse)
-async def root():
-    return """
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <title>API Tester</title>
-    </head>
-    <body>
-        <h1>API Test Interface</h1>
-        <button onclick="fetchData()">Select random card</button>
-        <pre id="result">Click the button to fetch card data</pre>
-        
-        <script>
-            async function fetchData() {
-                const result = document.getElementById('result');
-                result.textContent = 'Loading...';
-                
-                try {
-                    const response = await fetch('/api/data');
-                    const data = await response.json();
-                    result.textContent = JSON.stringify(data, null, 2);
-                } catch (error) {
-                    result.textContent = 'Error: ' + error.message;
-                }
-            }
-        </script>
-    </body>
-    </html>
-    """
+# @app.get("/")
+# async def root():
+#     return RedirectResponse(url="/#")
+
+
+@app.get("/", response_class=HTMLResponse, include_in_schema=False)
+def custom_docs():
+    return get_swagger_ui_html(openapi_url="/openapi.json", title="Custom API UI")
 
 # # TODO this function needs to be changed to pull from the database instead of the demo cards OR "/api/data" should be moved to get("/cards")
 # @app.get("/api/data")
@@ -56,14 +36,14 @@ async def root():
 #             last_three_cards.append(card.id)
 #             return card
 
-@app.get("/cards")
+@app.get("/cards", tags=["Cards"])
 def get_all_cards():
     db = SessionLocal()
 
     cards = db.execute(select(Card)).scalars().all()
     return cards
 
-@app.get("/cards/{card_id}")
+@app.get("/cards/{card_id}", tags=["Cards"])
 def get_card(card_id: int):
     db = SessionLocal()
 
@@ -74,7 +54,7 @@ def get_card(card_id: int):
 
     return card
 
-@app.get("/cards/random")
+@app.get("/cards/random", tags=["Cards"])
 def get_random_card():
     db = SessionLocal()
 
@@ -100,3 +80,8 @@ def get_random_card():
 #     db.refresh(new_card)
 
 #     return new_card
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("app.main:app", host="127.0.0.1", port=8000, reload=True)
