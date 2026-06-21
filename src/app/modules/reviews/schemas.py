@@ -1,5 +1,20 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
-class ReviewSchema(BaseModel):
-    card_id: int = None
-    rating: int = None
+
+class ReviewCreate(BaseModel):
+    card_id: int
+    rating: int  # 1–5
+
+
+class ReviewRead(BaseModel):
+    id: int
+    card_id: int
+    rating: int
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class DeckScore(BaseModel):
+    deck_id: int
+    average_score: float
+    review_count: int
