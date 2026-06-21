@@ -1,87 +1,67 @@
-# .venv\Scripts\Activate.ps1
-# fastapi dev (to launch the server)
-
 from fastapi import FastAPI
-from typing import Annotated
-from pydantic import BaseModel
-from fastapi.responses import HTMLResponse
-from sqlalchemy import select
-from random import choice
-from fastapi.responses import RedirectResponse
-from fastapi.openapi.docs import get_swagger_ui_html
+from contextlib import asynccontextmanager
 
-# app imports
-from app.modules.cards.services import get_card_by_id
-from app.db.models import Card
-from app.db.database import SessionLocal
-from app.modules.cards.create import create_card
+from app.db.database import Base, engine
 
-app = FastAPI(docs_url="/",title="Spaced Repetition Flashcard API")
+# Import models so SQLAlchemy registers them
+from app.db import models  # noqa: F401
 
-# @app.get("/")
-# async def root():
-#     return RedirectResponse(url="/#")
+# Routers (domain-level)
+from app.modules.cards.router import router as cards_router
+from app.modules.decks.router import router as decks_router
+from app.modules.reviews.router import router as reviews_router
 
 
-@app.get("/", response_class=HTMLResponse, include_in_schema=False)
-def custom_docs():
-    return get_swagger_ui_html(openapi_url="/openapi.json", title="Custom API UI")
+# -------------------------------------------------
+# LIFESPAN (startup / shutdown hooks)
+# -------------------------------------------------
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup
+    Base.metadata.create_all(bind=engine)
 
-# # TODO this function needs to be changed to pull from the database instead of the demo cards OR "/api/data" should be moved to get("/cards")
-# @app.get("/api/data")
-# async def get_data() -> Card:
-#     while True:
-#         card = demo_cards[order[randint(0, len(order)-1)]]
-#         if card.id not in last_three_cards:
-#             last_three_cards.append(card.id)
-#             return card
+    yield
 
-@app.get("/cards", tags=["Cards"])
-def get_all_cards():
-    db = SessionLocal()
-
-    cards = db.execute(select(Card)).scalars().all()
-    return cards
-
-@app.get("/cards/{card_id}", tags=["Cards"])
-def get_card(card_id: int):
-    db = SessionLocal()
-
-    card = db.get(Card, card_id)
-
-    if not card:
-        return {"error": "card not found"}
-
-    return card
-
-@app.get("/cards/random", tags=["Cards"])
-def get_random_card():
-    db = SessionLocal()
-
-    cards = db.execute(select(Card)).scalars().all()
-
-    if not cards:
-        return {"error": "no cards in database"}
-
-    return choice(cards)
-
-# @app.get("/cards/db")
-# def read_card_db(card_id: int) -> Card | None:
-#     return get_card_by_id(card_id)
-
-# @app.post("/cards")
-# def create_card():
-#     db = SessionLocal()
-
-#     new_card = create_card(front=card.front, back=card.back)
-
-#     db.add(new_card)
-#     db.commit()
-#     db.refresh(new_card)
-
-#     return new_card
+    # Shutdown (placeholder for now)
+    # e.g. close pools, flush queues, etc.
 
 
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run("app.main:app", host="127.0.0.1", port=8000, reload=True)
+# -------------------------------------------------
+# APP
+# -------------------------------------------------
+app = FastAPI(
+    title="Bookwurm API",
+    version="0.1.0",
+    lifespan=lifespan,
+    docs_url="/docs",
+    redoc_url="/redoc",
+)
+
+
+# -------------------------------------------------
+# ROUTER REGISTRATION
+# -------------------------------------------------
+app.include_router(cards_router, prefix="/cards", tags=["cards"])
+app.include_router(decks_router, prefix="/decks", tags=["decks"])
+app.include_router(reviews_router, prefix="/reviews", tags=["reviews"])
+
+
+# -------------------------------------------------
+# ROOT (API health, not UI logic)
+# -------------------------------------------------
+@app.get("/")
+def root():
+    return {
+        "service": "bookwurm",
+        "status": "running",
+        "docs": "/docs",
+        "health": "/health"
+    }
+
+
+# -------------------------------------------------
+# HEALTH CHECK (useful for CI/CD + deployments)
+# -------------------------------------------------
+@app.get("/health")
+def health():
+    return {"status": "ok"}
