@@ -1,9 +1,16 @@
-from sqlalchemy import Column, Integer, String
-from .database import Base
+# db/models.py
 
-class Card(Base):
-    __tablename__ = "cards"
+# IMPORTANT:
+# This file should NOT define models.
+# It only imports them so SQLAlchemy registers metadata.
 
-    id = Column(Integer, primary_key=True, index=True)
-    front = Column(String, nullable=False)
-    back = Column(String, nullable=False)
+from app.modules.cards.model import *
+from app.modules.decks.model import *
+from app.modules.reviews.model import *
+
+
+__all__ = [
+    "CardModel",
+    "DeckModel",
+    "ReviewModel",
+]

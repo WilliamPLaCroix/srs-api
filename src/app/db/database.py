@@ -1,16 +1,42 @@
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, declarative_base
+from sqlalchemy.orm import sessionmaker, DeclarativeBase
 
-DATABASE_URL = "postgresql://user:password@localhost:5432/anki"
+# -------------------------------------------------
+# DATABASE URL
+# Swap this later for Postgres in production
+# -------------------------------------------------
+DATABASE_URL = "sqlite:///./bookwurm.db"
 
-engine = create_engine(DATABASE_URL)
-SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 
-Base = declarative_base()
+# -------------------------------------------------
+# ENGINE
+# -------------------------------------------------
+engine = create_engine(
+    DATABASE_URL,
+    connect_args={"check_same_thread": False}
+)
 
-def get_engine():
-    return engine
 
+# -------------------------------------------------
+# SESSION FACTORY
+# -------------------------------------------------
+SessionLocal = sessionmaker(
+    bind=engine,
+    autoflush=False,
+    autocommit=False,
+)
+
+
+# -------------------------------------------------
+# BASE CLASS (SQLAlchemy 2.0 style)
+# -------------------------------------------------
+class Base(DeclarativeBase):
+    pass
+
+
+# -------------------------------------------------
+# FASTAPI DEPENDENCY
+# -------------------------------------------------
 def get_db():
     db = SessionLocal()
     try:
