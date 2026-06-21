@@ -1,6 +1,5 @@
 import pytest
-from app.modules.reviews.schemas import ReviewSchema
-  # or whatever exists
+
 
 def test_review_imports():
     import app.modules.reviews.schemas
@@ -9,6 +8,8 @@ def test_review_imports():
     #import app.modules.reviews.api
     #import app.modules.reviews.db
 
+
+from app.modules.reviews.schemas import ReviewSchema
 def test_review_schema_can_be_instantiated():
     review = ReviewSchema()
     assert review is not None

@@ -1,6 +1,5 @@
 import pytest
-from app.modules.decks.schemas import DeckSchema
-  # or whatever exists
+
 
 def test_deck_imports():
     import app.modules.decks.schemas
@@ -9,6 +8,8 @@ def test_deck_imports():
     #import app.modules.decks.api
     #import app.modules.decks.db
 
+
+from app.modules.decks.schemas import DeckSchema
 def test_deck_schema_can_be_instantiated():
     deck = DeckSchema()
     assert deck is not None
