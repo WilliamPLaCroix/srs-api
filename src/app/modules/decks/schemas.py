@@ -1,5 +1,18 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
-class DeckSchema(BaseModel):
-    id: int = None
-    name: str = None
+
+class DeckCreate(BaseModel):
+    name: str
+
+
+class DeckRead(BaseModel):
+    id: int
+    name: str
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class DeckWithCards(BaseModel):
+    id: int
+    name: str
+    cards: list[dict]
