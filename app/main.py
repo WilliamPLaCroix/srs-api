@@ -7,6 +7,9 @@ from pydantic import BaseModel
 from random import shuffle, randint
 from fastapi.responses import HTMLResponse
 
+# app imports
+from app.services.cards import get_card_by_id
+
 app = FastAPI()
 
 class Card(BaseModel):
@@ -26,6 +29,7 @@ demo_cards = {
     8: Card(id=8, front="id8: This is a sentence with a rhetorical question, which can be used to make a point or provoke thought.", back="(Notes and translation)"),
     9: Card(id=9, front="id9: This is a sentence with a hyperbole, which can be used for emphasis or humor.", back="(Notes and translation)"),
 }
+
 error_card = Card(id=-1, front="Error: Invalid card ID", back="Please provide a valid card ID.")
 
 order = list(demo_cards.keys())
@@ -89,3 +93,11 @@ def read_card(card_id: int) -> Card | None:
     if card_id not in set(order):
         return error_card
     return demo_cards.get(card_id)
+
+@app.get("/cards/random")
+def read_random_card() -> Card:
+    return demo_cards[order[0]]
+
+@app.get("/cards/db")
+def read_card_db(card_id: int) -> Card | None:
+    return get_card_by_id(card_id)
