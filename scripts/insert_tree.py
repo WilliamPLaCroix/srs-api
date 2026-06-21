@@ -1,7 +1,7 @@
 from pathlib import Path
 
 readme = Path("README.md").read_text(encoding="utf-8")
-tree = Path("TREE.md").read_text(encoding="utf-8")
+tree = Path("TREE.md").read_text(encoding="utf-16")
 
 start = "<!-- TREE_START -->"
 end = "<!-- TREE_END -->"
