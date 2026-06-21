@@ -3,7 +3,6 @@ name = "bookwurm"
 version = "0.1.0"
 requires-python = ">=3.13"
 dependencies = [] # fill if/when we stop using requirements.txt
-pip install -e .
 
 [tool.fastapi]
 entrypoint = "app.main:app"
