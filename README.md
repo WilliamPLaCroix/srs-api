@@ -51,9 +51,11 @@ CI/CD
 
 ## Project Structure
 
-```text
+```
 
-$(cat TREE.md)
+<!-- TREE_START -->
+Old tree will be replaced
+<!-- TREE_END -->
 
 ```
 ---
