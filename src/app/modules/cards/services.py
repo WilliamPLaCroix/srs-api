@@ -1,7 +1,7 @@
 from app.db.models import Card
 
 def get_card_by_id(card_id: int):
-    pass
+    return None
 
 def get_all_cards():
-    pass
+    return []
