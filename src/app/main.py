@@ -33,7 +33,7 @@ app = FastAPI(
     title="Bookwurm API",
     version="0.1.0",
     lifespan=lifespan,
-    docs_url="/docs",
+    docs_url="/",
     redoc_url="/redoc",
 )
 
