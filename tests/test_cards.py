@@ -16,8 +16,8 @@ def test_card_schema_can_be_instantiated():
 
 
 def test_card_schema_fields():
-    card = CardSchema(id="1", front="a", back="b")
-    assert card.id == "1"
+    card = CardSchema(id=1, front="a", back="b")
+    assert card.id == 1
     assert card.front == "a"
     assert card.back == "b"
 
@@ -28,7 +28,7 @@ def test_create_card_function_exists():
 
 
 def test_create_card_function():
-    card = create_card(id="1", front="a", back="b")
-    assert card.id == "1"
+    card = create_card(id=1, front="a", back="b")
+    assert card.id == 1
     assert card.front == "a"
     assert card.back == "b"
