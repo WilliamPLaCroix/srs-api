@@ -26,7 +26,7 @@ def print_tree(path: Path, prefix: str = ""):
 
     entries = [
         e for e in entries
-        if not (e.is_dir() and should_skip_dir(e.name))
+        if not (e.is_dir() and should_skip_dir(e.name)) and (e.name != "__init__.py")
     ]
 
     for i, entry in enumerate(entries):
