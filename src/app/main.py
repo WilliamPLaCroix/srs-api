@@ -12,7 +12,7 @@ from random import choice
 from app.modules.cards.services import get_card_by_id
 from app.db.models import Card
 from app.db.database import SessionLocal
-from app.modules.cards.create import CardCreate
+from app.modules.cards.create import create_card
 
 app = FastAPI()
 
@@ -47,14 +47,14 @@ async def root():
     </html>
     """
 
-# TODO this function needs to be changed to pull from the database instead of the demo cards OR "/api/data" should be moved to get("/cards")
-@app.get("/api/data")
-async def get_data() -> Card:
-    while True:
-        card = demo_cards[order[randint(0, len(order)-1)]]
-        if card.id not in last_three_cards:
-            last_three_cards.append(card.id)
-            return card
+# # TODO this function needs to be changed to pull from the database instead of the demo cards OR "/api/data" should be moved to get("/cards")
+# @app.get("/api/data")
+# async def get_data() -> Card:
+#     while True:
+#         card = demo_cards[order[randint(0, len(order)-1)]]
+#         if card.id not in last_three_cards:
+#             last_three_cards.append(card.id)
+#             return card
 
 @app.get("/cards")
 def get_all_cards():
@@ -85,18 +85,18 @@ def get_random_card():
 
     return choice(cards)
 
-@app.get("/cards/db")
-def read_card_db(card_id: int) -> Card | None:
-    return get_card_by_id(card_id)
+# @app.get("/cards/db")
+# def read_card_db(card_id: int) -> Card | None:
+#     return get_card_by_id(card_id)
 
-@app.post("/cards")
-def create_card(card: CardCreate):
-    db = SessionLocal()
+# @app.post("/cards")
+# def create_card():
+#     db = SessionLocal()
 
-    new_card = Card(front=card.front, back=card.back)
+#     new_card = create_card(front=card.front, back=card.back)
 
-    db.add(new_card)
-    db.commit()
-    db.refresh(new_card)
+#     db.add(new_card)
+#     db.commit()
+#     db.refresh(new_card)
 
-    return new_card
+#     return new_card
