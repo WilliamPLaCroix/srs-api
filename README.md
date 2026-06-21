@@ -49,8 +49,6 @@ CI/CD
 
 ---
 
-```
-
 <!-- TREE_START -->
 
 ```text
@@ -91,7 +89,6 @@ app
 ```
 <!-- TREE_END -->
 
-```
 ---
 
 ## Work Packages
