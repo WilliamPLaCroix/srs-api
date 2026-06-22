@@ -18,11 +18,16 @@ RUN apt-get update && apt-get install -y \
 
 # Install dependencies first (better caching)
 COPY requirements.txt .
-
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy project
+# Create non-root user
+RUN useradd -m appuser
+
+# Copy app
 COPY . .
+
+# Switch to non-root user
+USER appuser
 
 # IMPORTANT: ensure src is importable
 ENV PYTHONPATH=src
