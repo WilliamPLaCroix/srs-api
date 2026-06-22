@@ -1,11 +1,12 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 import uvicorn
+import os
 
+# app imports
+from app.core.settings import settings
 from app.db.database import Base, engine
-
-# Import models so SQLAlchemy registers them
-from app.db import models  # noqa: F401
+from app.db import models
 
 # Routers (domain-level)
 from app.modules.cards.router import router as cards_router
@@ -50,13 +51,15 @@ app.include_router(reviews_router, prefix="/reviews", tags=["reviews"])
 # -------------------------------------------------
 # ROOT (API health, not UI logic)
 # -------------------------------------------------
+
 @app.get("/")
 def root():
     return {
-        "service": "bookwurm",
+        "service": settings.service_name,
         "status": "running",
         "docs": "/docs",
-        "health": "/health"
+        "health": "/health",
+        "env": settings.environment,
     }
 
 

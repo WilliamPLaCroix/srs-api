@@ -1,6 +1,9 @@
 services:
   - type: web
-    name: bookwurm
+    name: app-service
     runtime: python
     buildCommand: pip install -e .
     startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: SERVICE_NAME
+        value: app-service
