@@ -13,7 +13,7 @@ from app.core.logging import setup_logging
 
 # Database
 from app.db.database import Base, engine
-from app.db import models
+from app import db
 
 # Routers (domain-level)
 from app.modules.cards.router import router as cards_router

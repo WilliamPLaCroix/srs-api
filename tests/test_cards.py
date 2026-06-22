@@ -5,7 +5,7 @@ from app.modules.cards.repository import CardRepository
 from app.modules.cards.services import CardService
 from app.modules.cards.schemas import CardCreate
 
-from app.db import models  # ensure metadata registered
+from app import db  # ensure metadata registered
 Base.metadata.create_all(bind=engine)
 
 @pytest.fixture(scope="function")
@@ -23,7 +23,7 @@ def test_imports():
     from app.modules.cards.services import CardService
     from app.modules.cards.schemas import CardCreate
 
-    from app.db import models  # ensure metadata registered
+    from app import db  # ensure metadata registered
 
 
 def test_create_card_flow(db):

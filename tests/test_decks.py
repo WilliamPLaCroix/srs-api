@@ -6,7 +6,7 @@ from app.modules.decks.services import DeckService
 
 from app.modules.cards.repository import CardRepository
 
-from app.db import models
+from app import db
 Base.metadata.create_all(bind=engine)
 
 @pytest.fixture(scope="function")
@@ -24,7 +24,7 @@ def test_imports():
     from app.modules.decks.services import DeckService
     from app.modules.decks.schemas import DeckCreate
 
-    from app.db import models  # ensure metadata registered
+    from app import db  # ensure metadata registered
 
 
 def test_deck_creation(db):

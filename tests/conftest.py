@@ -5,7 +5,7 @@ from sqlalchemy.pool import StaticPool
 
 from app.db.database import Base, get_db
 from app.main import app
-from app.db import models  # noqa: F401
+from app import db  # noqa: F401
 
 TEST_DB_URL = "sqlite:///:memory:"
 
