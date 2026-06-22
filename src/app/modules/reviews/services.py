@@ -2,7 +2,9 @@ from statistics import mean
 
 from app.modules.reviews.repository import ReviewRepository
 from app.modules.cards.model import CardModel
+import logging
 
+logger = logging.getLogger(__name__)
 
 class ReviewService:
 

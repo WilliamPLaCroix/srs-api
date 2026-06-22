@@ -2,7 +2,9 @@ from sqlalchemy.orm import Session, joinedload
 
 from app.modules.decks.model import DeckModel
 from app.modules.cards.model import CardModel
+import logging
 
+logger = logging.getLogger(__name__)
 
 class DeckRepository:
 

@@ -1,5 +1,7 @@
 from app.modules.decks.repository import DeckRepository
+import logging
 
+logger = logging.getLogger(__name__)
 
 class DeckService:
 

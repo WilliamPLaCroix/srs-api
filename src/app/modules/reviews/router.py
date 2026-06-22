@@ -6,7 +6,9 @@ from app.db.database import get_db
 from app.modules.reviews.schemas import ReviewCreate, ReviewRead, DeckScore
 from app.modules.reviews.repository import ReviewRepository
 from app.modules.reviews.services import ReviewService
+import logging
 
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 

@@ -1,7 +1,9 @@
 from sqlalchemy.orm import Session
 
 from app.modules.cards.model import CardModel
+import logging
 
+logger = logging.getLogger(__name__)
 
 class CardRepository:
 
