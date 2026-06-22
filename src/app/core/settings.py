@@ -19,7 +19,8 @@ class Settings(BaseSettings):
     service_name: str = "app"
 
     # Database
-    database_url: str = "sqlite:///./app.db"
+    ### TODO: In production, this should be set to a more robust database like PostgreSQL or MySQL.
+    database_url: str = "sqlite:///./test.db"
 
     # Runtime
     environment: str = "development"  # development | staging | production
