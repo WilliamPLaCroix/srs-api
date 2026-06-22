@@ -4,6 +4,12 @@ version = "0.1.0"
 requires-python = ">=3.13"
 dependencies = [] # fill if/when we stop using requirements.txt
 
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
 [tool.fastapi]
 entrypoint = "app.main:app"
 
