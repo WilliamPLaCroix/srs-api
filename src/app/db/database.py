@@ -1,12 +1,14 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, DeclarativeBase
+import os
+
+from app.core.settings import settings
 
 # -------------------------------------------------
 # DATABASE URL
 # Swap this later for Postgres in production
 # -------------------------------------------------
-DATABASE_URL = "sqlite:///./bookwurm.db"
-
+DATABASE_URL = settings.database_url
 
 # -------------------------------------------------
 # ENGINE
