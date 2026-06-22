@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
+import uvicorn
 
 from app.db.database import Base, engine
 
@@ -30,7 +31,7 @@ async def lifespan(app: FastAPI):
 # APP
 # -------------------------------------------------
 app = FastAPI(
-    title="Bookwurm API",
+    title="Spaced Repetition Flashcards API",
     version="0.1.0",
     lifespan=lifespan,
     docs_url="/",
@@ -65,3 +66,11 @@ def root():
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
+if __name__ == "__main__":
+
+    uvicorn.run("app.main:app",
+                host="0.0.0.0",
+                port=8000,
+                log_level="info",
+                reload=True)
