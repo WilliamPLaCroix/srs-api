@@ -3,6 +3,8 @@ from contextlib import asynccontextmanager
 import uvicorn
 import os
 import logging
+from app.core.middleware import RequestContextMiddleware
+
 
 # Core
 from app.core.settings import settings
@@ -49,6 +51,7 @@ app = FastAPI(
     redoc_url="/redoc",
 )
 
+app.add_middleware(RequestContextMiddleware)
 
 # -------------------------------------------------
 # ROUTER REGISTRATION
