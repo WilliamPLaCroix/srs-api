@@ -1,15 +1,17 @@
-from sqlalchemy import Column, Integer, ForeignKey
-from sqlalchemy.orm import relationship
+from sqlalchemy import Integer, ForeignKey, DateTime, func
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.database import Base
 
 
-class ReviewModel(Base):
+class Review(Base):
     __tablename__ = "reviews"
 
-    id = Column(Integer, primary_key=True)
-    rating = Column(Integer)
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
 
-    card_id = Column(Integer, ForeignKey("cards.id"))
+    card_id: Mapped[int] = mapped_column(ForeignKey("cards.id"), nullable=False)
 
-    card = relationship("CardModel", back_populates="reviews")
+    score: Mapped[int] = mapped_column(Integer, nullable=False)  # 0–5 scale
+    reviewed_at: Mapped[str] = mapped_column(DateTime, server_default=func.now())
+
+    card = relationship("Card", back_populates="reviews")
