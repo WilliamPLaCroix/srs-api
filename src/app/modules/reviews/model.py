@@ -11,7 +11,7 @@ class Review(Base):
 
     card_id: Mapped[int] = mapped_column(ForeignKey("cards.id"), nullable=False)
 
-    score: Mapped[int] = mapped_column(Integer, nullable=False)  # 0–5 scale
+    rating: Mapped[int] = mapped_column(Integer, nullable=False)  # 0–5 scale
     reviewed_at: Mapped[str] = mapped_column(DateTime, server_default=func.now())
 
     card = relationship("Card", back_populates="reviews")

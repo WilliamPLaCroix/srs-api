@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session, joinedload
 
-from app.modules.decks.model import DeckModel
-from app.modules.cards.model import CardModel
+from app.modules.decks.model import Deck as DeckModel
+from app.modules.cards.model import Card as CardModel
 import logging
 
 logger = logging.getLogger(__name__)

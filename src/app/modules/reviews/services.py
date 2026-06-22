@@ -1,7 +1,7 @@
 from statistics import mean
 
 from app.modules.reviews.repository import ReviewRepository
-from app.modules.cards.model import CardModel
+from app.modules.cards.model import Card as CardModel
 import logging
 
 logger = logging.getLogger(__name__)

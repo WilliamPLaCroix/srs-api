@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 
-from app.modules.reviews.model import ReviewModel
-from app.modules.cards.model import CardModel
+from app.modules.reviews.model import Review as ReviewModel
+from app.modules.cards.model import Card as CardModel
 import logging
 
 logger = logging.getLogger(__name__)

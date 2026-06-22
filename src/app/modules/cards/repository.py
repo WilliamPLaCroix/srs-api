@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 
-from app.modules.cards.model import CardModel
+from app.modules.cards.model import Card as CardModel
 import logging
 
 logger = logging.getLogger(__name__)
