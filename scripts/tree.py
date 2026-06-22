@@ -1,7 +1,9 @@
-# Automatically insert project directory tree into README.md
-# Usage:
-# python scripts/tree.py > TREE.md
-# python scripts/insert_tree.py
+"""
+Automatically insert project directory tree into README.md
+Usage:
+python scripts/tree.py > TREE.md
+python scripts/insert_tree.py
+"""
 
 from pathlib import Path
 import sys
