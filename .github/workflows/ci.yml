@@ -28,3 +28,16 @@ jobs:
 
       - name: Run tests
         run: pytest
+
+  docker-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Log in to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build image
+        run: docker build -t ghcr.io/${{ github.repository }}:latest .
+
+      - name: Push image
+        run: docker push ghcr.io/${{ github.repository }}:latest
