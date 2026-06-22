@@ -4,4 +4,4 @@ uvicorn==0.42.0
 SQLAlchemy==2.0.51
 psycopg2==2.9.12
 testcontainers[postgres]==4.14.2
-pydantic-settings==2.12.5
+pydantic-settings==2.6.1
