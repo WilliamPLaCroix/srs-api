@@ -1,5 +1,7 @@
 {
   "editor.formatOnSave": true,
   "python.analysis.typeCheckingMode": "basic",
-  "ruff.enable": true
+  "ruff.enable": true,
+  "coverage-gutters.showLineCoverage": true,
+  "coverage-gutters.showRulerCoverage": true
 }
