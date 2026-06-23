@@ -5,9 +5,7 @@ from sqlalchemy.orm import Session
 
 from app.core.dependencies import get_card_service
 from app.db.session import get_session
-from app.modules.cards.repository import CardRepository
 from app.modules.cards.schemas import CardCreate, CardRead
-from app.modules.cards.services import CardService
 
 logger = logging.getLogger(__name__)
 

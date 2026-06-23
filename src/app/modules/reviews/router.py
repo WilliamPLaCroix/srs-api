@@ -5,9 +5,7 @@ from sqlalchemy.orm import Session
 
 from app.core.dependencies import get_review_service
 from app.db.session import get_session
-from app.modules.reviews.repository import ReviewRepository
 from app.modules.reviews.schemas import DeckScore, ReviewCreate, ReviewRead
-from app.modules.reviews.services import ReviewService
 
 logger = logging.getLogger(__name__)
 

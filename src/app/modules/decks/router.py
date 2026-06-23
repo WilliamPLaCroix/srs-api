@@ -5,9 +5,7 @@ from sqlalchemy.orm import Session
 
 from app.core.dependencies import get_deck_service
 from app.db.session import get_session
-from app.modules.decks.repository import DeckRepository
 from app.modules.decks.schemas import DeckCreate, DeckRead, DeckWithCards
-from app.modules.decks.services import DeckService
 
 logger = logging.getLogger(__name__)
 
