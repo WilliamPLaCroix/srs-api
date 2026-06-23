@@ -94,7 +94,7 @@ app
 - Unit tests for scheduling logic
 - Seed script with initial sentence data
 
-### WP2: FastAPI layer
+### WP2: FastAPI layer (mostly set up)
 - `GET /cards/next` - returns next i+1 card for a user
 - `POST /reviews` - submits comprehension score, triggers SRS update
 - `GET /vocab/{user_id}` - returns known vocabulary with metadata
@@ -106,13 +106,13 @@ app
 - `services/scorer.py` - ranks candidate cards by predicted comprehension
 - Heuristic baseline (% unknown words), upgradeable to ML model
 
-### WP4: Containerisation and MVP deploy
+### WP4: Containerisation and MVP deploy (mostly set up)
 - Dockerfile for FastAPI app
 - Docker Compose for local dev (API + DB)
 - Deploy to Railway via Docker
 - Environment-variable-driven config (no hardcoded credentials)
 
-### WP5: CI/CD and observability
+### WP5: CI/CD and observability (mostly set up)
 - GitHub Actions: run tests → build image → push to registry → deploy
 - Swap SQLite → PostgreSQL (Railway-managed)
 - CloudWatch logging and basic latency alarm
@@ -140,7 +140,3 @@ app
 | Observability | CloudWatch |
 
 ---
-
-## Status
-
-Work in progress: WP1 in development.
