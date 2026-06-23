@@ -37,9 +37,9 @@ def create_review(payload: ReviewCreate, service: ReviewService = Depends(get_se
     except ValueError as e:
         logger.warning("create_review bad request: %s", e)
         raise HTTPException(status_code=400, detail=str(e))
-    except Exception:
+    except Exception as err:
         logger.exception("Unexpected error in create_review")
-        raise HTTPException(status_code=500, detail="Internal server error")
+        raise HTTPException(status_code=500, detail="Internal server error") from err
 
 
 @router.get("/deck/{deck_id}", response_model=DeckScore)
@@ -54,6 +54,6 @@ def get_deck_score(deck_id: int, service: ReviewService = Depends(get_service)):
             result.get("review_count"),
         )
         return result
-    except Exception:
+    except Exception as err:
         logger.exception("Unexpected error in get_deck_score: deck_id=%s", deck_id)
-        raise HTTPException(status_code=500, detail="Internal server error")
+        raise HTTPException(status_code=500, detail="Internal server error") from err

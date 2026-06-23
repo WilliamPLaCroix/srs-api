@@ -32,9 +32,9 @@ def create_deck(payload: DeckCreate, service: DeckService = Depends(get_service)
     except ValueError as e:
         logger.warning("create_deck bad request: %s", e)
         raise HTTPException(status_code=400, detail=str(e))
-    except Exception:
+    except Exception as err:
         logger.exception("Unexpected error in create_deck")
-        raise HTTPException(status_code=500, detail="Internal server error")
+        raise HTTPException(status_code=500, detail="Internal server error") from err
 
 
 @router.get("/{deck_id}", response_model=DeckRead)
@@ -47,9 +47,9 @@ def get_deck(deck_id: int, service: DeckService = Depends(get_service)):
     except ValueError as e:
         logger.info("get_deck not found: deck_id=%s", deck_id)
         raise HTTPException(status_code=404, detail=str(e))
-    except Exception:
+    except Exception as err:
         logger.exception("Unexpected error in get_deck: deck_id=%s", deck_id)
-        raise HTTPException(status_code=500, detail="Internal server error")
+        raise HTTPException(status_code=500, detail="Internal server error") from err
 
 
 @router.get("/{deck_id}/full", response_model=DeckWithCards)
@@ -62,9 +62,9 @@ def get_deck_full(deck_id: int, service: DeckService = Depends(get_service)):
     except ValueError as e:
         logger.info("get_deck_full not found: deck_id=%s", deck_id)
         raise HTTPException(status_code=404, detail=str(e))
-    except Exception:
+    except Exception as err:
         logger.exception("Unexpected error in get_deck_full: deck_id=%s", deck_id)
-        raise HTTPException(status_code=500, detail="Internal server error")
+        raise HTTPException(status_code=500, detail="Internal server error") from err
 
 
 @router.delete("/{deck_id}")
@@ -77,6 +77,6 @@ def delete_deck(deck_id: int, service: DeckService = Depends(get_service)):
     except ValueError as e:
         logger.info("delete_deck not found: deck_id=%s", deck_id)
         raise HTTPException(status_code=404, detail=str(e))
-    except Exception:
+    except Exception as err:
         logger.exception("Unexpected error deleting deck_id=%s", deck_id)
-        raise HTTPException(status_code=500, detail="Internal server error")
+        raise HTTPException(status_code=500, detail="Internal server error") from err

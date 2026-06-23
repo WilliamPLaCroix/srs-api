@@ -37,9 +37,9 @@ def create_card(payload: CardCreate, service: CardService = Depends(get_service)
     except ValueError as e:
         logger.warning("create_card bad request: %s", e)
         raise HTTPException(status_code=400, detail=str(e))
-    except Exception:
+    except Exception as err:
         logger.exception("Unexpected error in create_card")
-        raise HTTPException(status_code=500, detail="Internal server error")
+        raise HTTPException(status_code=500, detail="Internal server error") from err
 
 
 @router.get("/{card_id}", response_model=CardRead)
@@ -52,9 +52,9 @@ def get_card(card_id: int, service: CardService = Depends(get_service)):
     except ValueError as e:
         logger.info("get_card not found: card_id=%s", card_id)
         raise HTTPException(status_code=404, detail=str(e))
-    except Exception:
+    except Exception as err:
         logger.exception("Unexpected error in get_card: card_id=%s", card_id)
-        raise HTTPException(status_code=500, detail="Internal server error")
+        raise HTTPException(status_code=500, detail="Internal server error") from err
 
 
 @router.get("/deck/{deck_id}", response_model=list[CardRead])
@@ -64,9 +64,9 @@ def get_cards(deck_id: int, service: CardService = Depends(get_service)):
         cards = service.get_cards_for_deck(deck_id)
         logger.info("Returning %s cards for deck_id=%s", len(cards), deck_id)
         return cards
-    except Exception:
+    except Exception as err:
         logger.exception("Unexpected error listing cards for deck_id=%s", deck_id)
-        raise HTTPException(status_code=500, detail="Internal server error")
+        raise HTTPException(status_code=500, detail="Internal server error") from err
 
 
 @router.delete("/{card_id}")
@@ -79,6 +79,6 @@ def delete_card(card_id: int, service: CardService = Depends(get_service)):
     except ValueError as e:
         logger.info("delete_card not found: card_id=%s", card_id)
         raise HTTPException(status_code=404, detail=str(e))
-    except Exception:
+    except Exception as err:
         logger.exception("Unexpected error deleting card_id=%s", card_id)
-        raise HTTPException(status_code=500, detail="Internal server error")
+        raise HTTPException(status_code=500, detail="Internal server error") from err
