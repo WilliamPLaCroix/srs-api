@@ -2,9 +2,16 @@ from fastapi import FastAPI
 from contextlib import asynccontextmanager
 import uvicorn
 import os
+import logging
+from app.core.middleware import RequestContextMiddleware
 
-# app imports
+
+# Core
 from app.core.settings import settings
+from app.core.health import router as health_router
+from app.core.logging import setup_logging
+
+# Database
 from app.db.database import Base, engine
 from app.db import models
 
@@ -12,6 +19,11 @@ from app.db import models
 from app.modules.cards.router import router as cards_router
 from app.modules.decks.router import router as decks_router
 from app.modules.reviews.router import router as reviews_router
+
+
+setup_logging()
+
+logger = logging.getLogger(__name__)
 
 
 # -------------------------------------------------
@@ -39,6 +51,7 @@ app = FastAPI(
     redoc_url="/redoc",
 )
 
+app.add_middleware(RequestContextMiddleware)
 
 # -------------------------------------------------
 # ROUTER REGISTRATION
@@ -46,12 +59,12 @@ app = FastAPI(
 app.include_router(cards_router, prefix="/cards", tags=["cards"])
 app.include_router(decks_router, prefix="/decks", tags=["decks"])
 app.include_router(reviews_router, prefix="/reviews", tags=["reviews"])
+app.include_router(health_router, prefix="/core", tags=["core"])
 
 
 # -------------------------------------------------
 # ROOT (API health, not UI logic)
 # -------------------------------------------------
-
 @app.get("/")
 def root():
     return {
@@ -61,14 +74,6 @@ def root():
         "health": "/health",
         "env": settings.environment,
     }
-
-
-# -------------------------------------------------
-# HEALTH CHECK (useful for CI/CD + deployments)
-# -------------------------------------------------
-@app.get("/health")
-def health():
-    return {"status": "ok"}
 
 if __name__ == "__main__":
 

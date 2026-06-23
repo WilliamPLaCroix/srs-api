@@ -2,31 +2,70 @@ from sqlalchemy.orm import Session, joinedload
 
 from app.modules.decks.model import DeckModel
 from app.modules.cards.model import CardModel
+import logging
 
+logger = logging.getLogger(__name__)
 
 class DeckRepository:
 
     def __init__(self, db: Session):
         self.db = db
+        logger.debug("DeckRepository initialized: Session=%s", type(db))
 
     def create(self, name: str) -> DeckModel:
-        deck = DeckModel(name=name)
-        self.db.add(deck)
-        self.db.commit()
-        self.db.refresh(deck)
-        return deck
+        logger.debug("create called: name=%s", name)
+        try:
+            deck = DeckModel(name=name)
+            self.db.add(deck)
+            self.db.commit()
+            self.db.refresh(deck)
+            logger.info("Deck created: id=%s name=%s", getattr(deck, "id", None), name)
+            return deck
+        except Exception:
+            logger.exception("Failed to create deck with name=%s", name)
+            raise
 
     def get(self, deck_id: int) -> DeckModel | None:
-        return self.db.query(DeckModel).filter(DeckModel.id == deck_id).first()
+        logger.debug("get called: deck_id=%s", deck_id)
+        try:
+            deck = self.db.query(DeckModel).filter(DeckModel.id == deck_id).first()
+        except Exception:
+            logger.exception("Failed to fetch deck_id=%s", deck_id)
+            raise
+
+        if not deck:
+            logger.debug("get returned no result: deck_id=%s", deck_id)
+        else:
+            logger.debug("get fetched deck: deck_id=%s", deck_id)
+        return deck
 
     def get_with_cards(self, deck_id: int) -> DeckModel | None:
-        return (
-            self.db.query(DeckModel)
-            .options(joinedload(DeckModel.cards))
-            .filter(DeckModel.id == deck_id)
-            .first()
-        )
+        logger.debug("get_with_cards called: deck_id=%s", deck_id)
+        try:
+            deck = (
+                self.db.query(DeckModel)
+                .options(joinedload(DeckModel.cards))
+                .filter(DeckModel.id == deck_id)
+                .first()
+            )
+        except Exception:
+            logger.exception("Failed to fetch deck with cards for deck_id=%s", deck_id)
+            raise
+
+        if not deck:
+            logger.info("Deck not found (with cards): deck_id=%s", deck_id)
+            return None
+
+        card_count = len(getattr(deck, "cards", []))
+        logger.info("Fetched deck with cards: deck_id=%s card_count=%s", deck_id, card_count)
+        return deck
 
     def delete(self, deck: DeckModel):
-        self.db.delete(deck)
-        self.db.commit()
+        logger.debug("delete called: deck_id=%s", getattr(deck, "id", None))
+        try:
+            self.db.delete(deck)
+            self.db.commit()
+            logger.info("Deleted deck: deck_id=%s", getattr(deck, "id", None))
+        except Exception:
+            logger.exception("Failed to delete deck_id=%s", getattr(deck, "id", None))
+            raise
