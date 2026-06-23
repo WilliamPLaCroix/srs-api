@@ -1,37 +1,43 @@
+import logging
+
 from sqlalchemy.orm import Session
 
-from app.modules.reviews.model import ReviewModel
-from app.modules.cards.model import CardModel
-import logging
+from app.modules.cards.model import Card
+from app.modules.reviews.model import Review
 
 logger = logging.getLogger(__name__)
 
-class ReviewRepository:
 
+class ReviewRepository:
     def __init__(self, db: Session):
         self.db = db
         logger.debug("ReviewRepository initialized: Session=%s", type(db))
 
-    def create(self, card_id: int, rating: int) -> ReviewModel:
+    def create(self, card_id: int, rating: int) -> Review:
         logger.debug("create called: card_id=%s rating=%s", card_id, rating)
         try:
-            review = ReviewModel(card_id=card_id, rating=rating)
+            review = Review(card_id=card_id, rating=rating)
             self.db.add(review)
             self.db.commit()
             self.db.refresh(review)
-            logger.info("Review created: id=%s card_id=%s rating=%s", getattr(review, "id", None), card_id, rating)
+            logger.info(
+                "Review created: id=%s card_id=%s rating=%s",
+                getattr(review, "id", None),
+                card_id,
+                rating,
+            )
             return review
         except Exception:
             logger.exception("Failed to create review for card_id=%s rating=%s", card_id, rating)
             raise
 
-    def get_by_deck(self, deck_id: int) -> list[ReviewModel]:
+    def get_by_deck(self, deck_id: int) -> list[Review]:
         logger.debug("get_by_deck called: deck_id=%s", deck_id)
         try:
             reviews = (
-                self.db.query(ReviewModel)
-                .join(CardModel, ReviewModel.card_id == CardModel.id)
-                .filter(CardModel.deck_id == deck_id)
+                self.db.query(Review)
+                .join(Card, Review.card_id == Card.id)
+                .filter(Card.deck_id == deck_id)
                 .all()
             )
             logger.info("get_by_deck found %s reviews for deck_id=%s", len(reviews), deck_id)

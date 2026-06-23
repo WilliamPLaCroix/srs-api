@@ -23,16 +23,25 @@ entrypoint = "app.main:app"
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 
+[tool.coverage.run]
+source = ["src/app"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = false
+
 # -----------------------
 # LINTING (ruff)
 # -----------------------
 [tool.ruff]
 line-length = 100
-target-version = "py311"
+target-version = "py313"
 
 [tool.ruff.lint]
-select = ["E", "F", "I", "B", "UP"]
-ignore = []
+select = ["E", "F", "B", "I"]  # errors, pyflakes, bugbear, imports
+
+[tool.ruff.format]
+quote-style = "double"
 
 # -----------------------
 # TYPE CHECKING (mypy)
@@ -43,12 +52,3 @@ warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = false
 ignore_missing_imports = true
-
-# -----------------------
-# OPTIONAL: coverage
-# -----------------------
-[tool.coverage.run]
-source = ["app"]
-
-[tool.coverage.report]
-show_missing = true

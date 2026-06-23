@@ -1,18 +1,13 @@
-from sqlalchemy import Column, Integer, String
-from sqlalchemy.orm import relationship
+from sqlalchemy import String
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.db.database import Base
+from app.db.base import Base
 
 
-class DeckModel(Base):
+class Deck(Base):
     __tablename__ = "decks"
 
-    id = Column(Integer, primary_key=True)
-    name = Column(String)
-    description = Column(String, nullable=True)
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    name: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
 
-    cards = relationship(
-        "CardModel",
-        back_populates="deck",
-        cascade="all, delete-orphan"
-    )
+    cards = relationship("Card", back_populates="deck", cascade="all, delete-orphan")

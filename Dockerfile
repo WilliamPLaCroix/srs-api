@@ -26,6 +26,9 @@ RUN useradd -m appuser
 # Copy app
 COPY . .
 
+RUN chown -R appuser:appuser /app
+RUN mkdir -p /app/data && chown -R appuser:appuser /app/data
+
 # Switch to non-root user
 USER appuser
 

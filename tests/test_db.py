@@ -1,8 +1,11 @@
-import pytest
 from sqlalchemy import text
 
-from app.db.database import engine, SessionLocal, get_db, Base
+from app.db.base import Base
+from app.db.engine import engine
+from app.db.session import SessionLocal, get_session
+
 Base.metadata.create_all(bind=engine)
+
 
 def test_engine_exists():
     assert engine is not None
@@ -22,7 +25,7 @@ def test_db_connection_smoke():
 
 
 def test_get_db_dependency():
-    gen = get_db()
+    gen = get_session()
     db = next(gen)
     assert db is not None
     try:

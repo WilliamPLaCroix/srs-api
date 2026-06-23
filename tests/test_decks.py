@@ -1,13 +1,14 @@
 import pytest
 
-from app.db.database import SessionLocal, Base, engine
+from app.db.base import Base
+from app.db.engine import engine
+from app.db.session import SessionLocal
+from app.modules.cards.repository import CardRepository
 from app.modules.decks.repository import DeckRepository
 from app.modules.decks.services import DeckService
 
-from app.modules.cards.repository import CardRepository
-
-from app.db import models
 Base.metadata.create_all(bind=engine)
+
 
 @pytest.fixture(scope="function")
 def db():
@@ -16,15 +17,6 @@ def db():
     yield db
     db.close()
     Base.metadata.drop_all(bind=engine)
-
-
-def test_imports():
-    from app.db.database import SessionLocal, Base, engine
-    from app.modules.decks.repository import DeckRepository
-    from app.modules.decks.services import DeckService
-    from app.modules.decks.schemas import DeckCreate
-
-    from app.db import models  # ensure metadata registered
 
 
 def test_deck_creation(db):

@@ -1,13 +1,14 @@
-from fastapi import APIRouter
 import logging
 
+from fastapi import APIRouter
+
 logger = logging.getLogger(__name__)
-router = APIRouter(tags=["health"])
+router = APIRouter(tags=["core"])
+
 
 @router.get("/health")
 def health():
-    status = {"status": "ok",
-            "db": "connected"}
+    status = {"status": "ok", "db": "connected"}
     logger.info("Health check successful", extra=status)
     return status
 

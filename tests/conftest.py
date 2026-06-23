@@ -3,9 +3,9 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
-from app.db.database import Base, get_db
+from app.db.base import Base
+from app.db.session import get_session
 from app.main import app
-from app.db import models  # noqa: F401
 
 TEST_DB_URL = "sqlite:///:memory:"
 
@@ -20,6 +20,7 @@ TestingSessionLocal = sessionmaker(
     autoflush=False,
     autocommit=False,
 )
+
 
 @pytest.fixture(scope="session", autouse=True)
 def setup_db():
@@ -36,4 +37,4 @@ def override_get_db():
         db.close()
 
 
-app.dependency_overrides[get_db] = override_get_db
+app.dependency_overrides[get_session] = override_get_db

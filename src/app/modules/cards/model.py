@@ -1,25 +1,18 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
-from sqlalchemy.orm import relationship
+from sqlalchemy import ForeignKey, String, Text
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.db.database import Base
+from app.db.base import Base
 
 
-class CardModel(Base):
+class Card(Base):
     __tablename__ = "cards"
 
-    id = Column(Integer, primary_key=True)
-    front = Column(String)
-    back = Column(String)
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
 
-    deck_id = Column(Integer, ForeignKey("decks.id"))
+    front: Mapped[str] = mapped_column(String(255), nullable=False)
+    back: Mapped[str] = mapped_column(Text, nullable=False)
 
-    deck = relationship(
-        "DeckModel",
-        back_populates="cards"
-    )
+    deck_id: Mapped[int] = mapped_column(ForeignKey("decks.id"), nullable=False)
 
-    reviews = relationship(
-        "ReviewModel",
-        cascade="all, delete",
-        back_populates="card"
-    )
+    deck = relationship("Deck", back_populates="cards")
+    reviews = relationship("Review", back_populates="card", cascade="all, delete-orphan")
