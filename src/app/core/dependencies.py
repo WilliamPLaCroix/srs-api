@@ -16,7 +16,6 @@ def get_session() -> Session:
     yield from get_session()
 
 
-
 # -----------------------
 # Cards
 # -----------------------

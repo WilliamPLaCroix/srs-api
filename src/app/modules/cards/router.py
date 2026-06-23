@@ -11,6 +11,7 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
+
 @router.post("/", response_model=CardRead)
 def create_card(payload: CardCreate, session: Session = Depends(get_session)):
     logger.debug(

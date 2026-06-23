@@ -11,6 +11,7 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
+
 @router.post("/", response_model=ReviewRead)
 def create_review(payload: ReviewCreate, session: Session = Depends(get_session)):
     logger.debug(
