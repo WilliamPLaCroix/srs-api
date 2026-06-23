@@ -13,7 +13,7 @@ router = APIRouter()
 
 
 @router.post("/", response_model=CardRead)
-def create_card(payload: CardCreate, session: Session = Depends(get_session)):
+def create_card(payload: CardCreate, session: Session = Depends(get_session)):  # noqa: B008
     logger.debug(
         "create_card endpoint called: deck_id=%s front_present=%s back_present=%s",
         getattr(payload, "deck_id", None),
@@ -38,7 +38,7 @@ def create_card(payload: CardCreate, session: Session = Depends(get_session)):
 
 
 @router.get("/{card_id}", response_model=CardRead)
-def get_card(card_id: int, session: Session = Depends(get_session)):
+def get_card(card_id: int, session: Session = Depends(get_session)):  # noqa: B008
     logger.debug("get_card endpoint called: card_id=%s", card_id)
     service = get_card_service(session)
     try:
@@ -54,7 +54,7 @@ def get_card(card_id: int, session: Session = Depends(get_session)):
 
 
 @router.get("/deck/{deck_id}", response_model=list[CardRead])
-def get_cards(deck_id: int, session: Session = Depends(get_session)):
+def get_cards(deck_id: int, session: Session = Depends(get_session)):  # noqa: B008
     logger.debug("get_cards endpoint called: deck_id=%s", deck_id)
     service = get_card_service(session)
     try:
@@ -67,7 +67,7 @@ def get_cards(deck_id: int, session: Session = Depends(get_session)):
 
 
 @router.delete("/{card_id}")
-def delete_card(card_id: int, session: Session = Depends(get_session)):
+def delete_card(card_id: int, session: Session = Depends(get_session)):  # noqa: B008
     logger.debug("delete_card endpoint called: card_id=%s", card_id)
     service = get_card_service(session)
     try:

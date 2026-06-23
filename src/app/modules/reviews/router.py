@@ -13,7 +13,7 @@ router = APIRouter()
 
 
 @router.post("/", response_model=ReviewRead)
-def create_review(payload: ReviewCreate, session: Session = Depends(get_session)):
+def create_review(payload: ReviewCreate, session: Session = Depends(get_session)):  # noqa: B008
     logger.debug(
         "create_review endpoint called: card_id=%s rating=%s",
         getattr(payload, "card_id", None),
@@ -38,7 +38,7 @@ def create_review(payload: ReviewCreate, session: Session = Depends(get_session)
 
 
 @router.get("/deck/{deck_id}", response_model=DeckScore)
-def get_deck_score(deck_id: int, session: Session = Depends(get_session)):
+def get_deck_score(deck_id: int, session: Session = Depends(get_session)):  # noqa: B008
     logger.debug("get_deck_score endpoint called: deck_id=%s", deck_id)
     service = get_review_service(session)
     try:

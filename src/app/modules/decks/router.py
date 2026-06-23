@@ -13,7 +13,7 @@ router = APIRouter()
 
 
 @router.post("/", response_model=DeckRead)
-def create_deck(payload: DeckCreate, session: Session = Depends(get_session)):
+def create_deck(payload: DeckCreate, session: Session = Depends(get_session)):  # noqa: B008
     logger.debug("create_deck endpoint called: name_present=%s", bool(getattr(payload, "name", "")))
     service = get_deck_service(session)
     try:
@@ -33,7 +33,7 @@ def create_deck(payload: DeckCreate, session: Session = Depends(get_session)):
 
 
 @router.get("/{deck_id}", response_model=DeckRead)
-def get_deck(deck_id: int, session: Session = Depends(get_session)):
+def get_deck(deck_id: int, session: Session = Depends(get_session)):  # noqa: B008
     logger.debug("get_deck endpoint called: deck_id=%s", deck_id)
     service = get_deck_service(session)
     try:
@@ -49,7 +49,7 @@ def get_deck(deck_id: int, session: Session = Depends(get_session)):
 
 
 @router.get("/{deck_id}/full", response_model=DeckWithCards)
-def get_deck_full(deck_id: int, session: Session = Depends(get_session)):
+def get_deck_full(deck_id: int, session: Session = Depends(get_session)):  # noqa: B008
     logger.debug("get_deck_full endpoint called: deck_id=%s", deck_id)
     service = get_deck_service(session)
     try:
@@ -65,7 +65,7 @@ def get_deck_full(deck_id: int, session: Session = Depends(get_session)):
 
 
 @router.delete("/{deck_id}")
-def delete_deck(deck_id: int, session: Session = Depends(get_session)):
+def delete_deck(deck_id: int, session: Session = Depends(get_session)):  # noqa: B008
     logger.debug("delete_deck endpoint called: deck_id=%s", deck_id)
     service = get_deck_service(session)
     try:
