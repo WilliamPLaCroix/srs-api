@@ -1,1 +1,1 @@
-from app.core.dependencies import *
+# from app.core.dependencies import *

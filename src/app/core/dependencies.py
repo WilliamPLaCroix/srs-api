@@ -1,19 +1,11 @@
 from sqlalchemy.orm import Session
 
-from app.db.session import get_session
 from app.modules.cards.repository import CardRepository
 from app.modules.cards.services import CardService
 from app.modules.decks.repository import DeckRepository
 from app.modules.decks.services import DeckService
 from app.modules.reviews.repository import ReviewRepository
 from app.modules.reviews.services import ReviewService
-
-
-# -----------------------
-# DB session dependency
-# -----------------------
-def get_session() -> Session:
-    yield from get_session()
 
 
 # -----------------------

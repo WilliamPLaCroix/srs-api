@@ -3,12 +3,12 @@ import pytest
 from app.db.base import Base
 from app.db.engine import engine
 from app.db.session import SessionLocal
+from app.modules.cards.repository import CardRepository
 from app.modules.decks.repository import DeckRepository
 from app.modules.decks.services import DeckService
 
-from app.modules.cards.repository import CardRepository
-
 Base.metadata.create_all(bind=engine)
+
 
 @pytest.fixture(scope="function")
 def db():

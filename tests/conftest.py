@@ -4,9 +4,8 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
 from app.db.base import Base
-from app.main import app
 from app.db.session import get_session
-
+from app.main import app
 
 TEST_DB_URL = "sqlite:///:memory:"
 
@@ -21,6 +20,7 @@ TestingSessionLocal = sessionmaker(
     autoflush=False,
     autocommit=False,
 )
+
 
 @pytest.fixture(scope="session", autouse=True)
 def setup_db():

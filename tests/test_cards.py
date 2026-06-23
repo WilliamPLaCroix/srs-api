@@ -4,11 +4,11 @@ from app.db.base import Base
 from app.db.engine import engine
 from app.db.session import SessionLocal
 from app.modules.cards.repository import CardRepository
-from app.modules.cards.services import CardService
 from app.modules.cards.schemas import CardCreate
+from app.modules.cards.services import CardService
 
-from app import db  # ensure metadata registered
 Base.metadata.create_all(bind=engine)
+
 
 @pytest.fixture(scope="function")
 def db():
@@ -23,11 +23,7 @@ def test_create_card_flow(db):
     repo = CardRepository(db)
     service = CardService(repo)
 
-    payload = CardCreate(
-        front="What is FastAPI?",
-        back="A Python web framework",
-        deck_id=1
-    )
+    payload = CardCreate(front="What is FastAPI?", back="A Python web framework", deck_id=1)
 
     card = service.create_card(payload)
 
@@ -40,9 +36,7 @@ def test_get_card_flow(db):
     repo = CardRepository(db)
     service = CardService(repo)
 
-    created = service.create_card(
-        CardCreate(front="A", back="B", deck_id=1)
-    )
+    created = service.create_card(CardCreate(front="A", back="B", deck_id=1))
 
     fetched = service.get_card(created.id)
 
@@ -59,6 +53,7 @@ def test_get_cards_by_deck(db):
     cards = service.get_cards_for_deck(99)
 
     assert len(cards) == 2
+
 
 def test_delete_card(db):
     repo = CardRepository(db)

@@ -5,8 +5,9 @@ python scripts/tree.py > TREE.md
 python scripts/insert_tree.py
 """
 
-from pathlib import Path
 import sys
+from pathlib import Path
+
 sys.stdout.reconfigure(encoding="utf-8")
 
 IGNORE_DIRS = {
@@ -32,7 +33,8 @@ def print_tree(path: Path, prefix: str = ""):
     entries = sorted(path.iterdir(), key=lambda p: (p.is_file(), p.name.lower()))
 
     entries = [
-        e for e in entries
+        e
+        for e in entries
         if not (e.is_dir() and should_skip_dir(e.name)) and (e.name != "__init__.py")
     ]
 

@@ -1,15 +1,15 @@
 import pytest
 
 from app.db.base import Base
-from app.db.session import SessionLocal
 from app.db.engine import engine
-
+from app.db.session import SessionLocal
 from app.modules.cards.repository import CardRepository
 from app.modules.decks.repository import DeckRepository
 from app.modules.reviews.repository import ReviewRepository
 from app.modules.reviews.services import ReviewService
 
 Base.metadata.create_all(bind=engine)
+
 
 @pytest.fixture(scope="function")
 def db():
