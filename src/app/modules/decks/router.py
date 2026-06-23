@@ -23,7 +23,11 @@ def create_deck(payload: DeckCreate, service: DeckService = Depends(get_service)
     logger.debug("create_deck endpoint called: name_present=%s", bool(getattr(payload, "name", "")))
     try:
         deck = service.create_deck(payload.name)
-        logger.info("Deck created via endpoint: id=%s name=%s", getattr(deck, "id", None), getattr(deck, "name", None))
+        logger.info(
+            "Deck created via endpoint: id=%s name=%s",
+            getattr(deck, "id", None),
+            getattr(deck, "name", None),
+        )
         return deck
     except ValueError as e:
         logger.warning("create_deck bad request: %s", e)

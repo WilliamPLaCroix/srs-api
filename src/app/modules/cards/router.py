@@ -20,10 +20,19 @@ def get_service(db: Session = Depends(get_db)) -> CardService:
 
 @router.post("/", response_model=CardRead)
 def create_card(payload: CardCreate, service: CardService = Depends(get_service)):
-    logger.debug("create_card endpoint called: deck_id=%s front_present=%s back_present=%s", getattr(payload, "deck_id", None), bool(getattr(payload, "front", None)), bool(getattr(payload, "back", None)))
+    logger.debug(
+        "create_card endpoint called: deck_id=%s front_present=%s back_present=%s",
+        getattr(payload, "deck_id", None),
+        bool(getattr(payload, "front", None)),
+        bool(getattr(payload, "back", None)),
+    )
     try:
         card = service.create_card(payload)
-        logger.info("Card created via endpoint: id=%s deck_id=%s", getattr(card, "id", None), getattr(card, "deck_id", None))
+        logger.info(
+            "Card created via endpoint: id=%s deck_id=%s",
+            getattr(card, "id", None),
+            getattr(card, "deck_id", None),
+        )
         return card
     except ValueError as e:
         logger.warning("create_card bad request: %s", e)
@@ -58,6 +67,7 @@ def get_cards(deck_id: int, service: CardService = Depends(get_service)):
     except Exception:
         logger.exception("Unexpected error listing cards for deck_id=%s", deck_id)
         raise HTTPException(status_code=500, detail="Internal server error")
+
 
 @router.delete("/{card_id}")
 def delete_card(card_id: int, service: CardService = Depends(get_service)):

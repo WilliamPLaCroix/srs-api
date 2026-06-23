@@ -8,6 +8,7 @@ SessionLocal = sessionmaker(
     autocommit=False,
 )
 
+
 # -------------------------------------------------
 # FASTAPI DEPENDENCY
 # -------------------------------------------------

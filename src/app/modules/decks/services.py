@@ -4,8 +4,8 @@ from app.modules.decks.repository import DeckRepository
 
 logger = logging.getLogger(__name__)
 
-class DeckService:
 
+class DeckService:
     def __init__(self, repo: DeckRepository):
         self.repo = repo
 
@@ -52,20 +52,15 @@ class DeckService:
             raise ValueError("Deck not found")
 
         card_count = len(getattr(deck, "cards", []))
-        logger.debug("Transforming deck to API shape: deck_id=%s card_count=%s", deck_id, card_count)
+        logger.debug(
+            "Transforming deck to API shape: deck_id=%s card_count=%s", deck_id, card_count
+        )
 
         # transform ORM → API shape
         result = {
             "id": deck.id,
             "name": deck.name,
-            "cards": [
-                {
-                    "id": c.id,
-                    "front": c.front,
-                    "back": c.back
-                }
-                for c in deck.cards
-            ]
+            "cards": [{"id": c.id, "front": c.front, "back": c.back} for c in deck.cards],
         }
 
         logger.info("Deck with cards prepared: deck_id=%s card_count=%s", deck_id, card_count)

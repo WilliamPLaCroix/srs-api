@@ -20,10 +20,19 @@ def get_service(db: Session = Depends(get_db)) -> ReviewService:
 
 @router.post("/", response_model=ReviewRead)
 def create_review(payload: ReviewCreate, service: ReviewService = Depends(get_service)):
-    logger.debug("create_review endpoint called: card_id=%s rating=%s", getattr(payload, "card_id", None), getattr(payload, "rating", None))
+    logger.debug(
+        "create_review endpoint called: card_id=%s rating=%s",
+        getattr(payload, "card_id", None),
+        getattr(payload, "rating", None),
+    )
     try:
         review = service.create_review(payload.card_id, payload.rating)
-        logger.info("Review created via endpoint: id=%s card_id=%s rating=%s", getattr(review, "id", None), payload.card_id, payload.rating)
+        logger.info(
+            "Review created via endpoint: id=%s card_id=%s rating=%s",
+            getattr(review, "id", None),
+            payload.card_id,
+            payload.rating,
+        )
         return review
     except ValueError as e:
         logger.warning("create_review bad request: %s", e)
@@ -38,7 +47,12 @@ def get_deck_score(deck_id: int, service: ReviewService = Depends(get_service)):
     logger.debug("get_deck_score endpoint called: deck_id=%s", deck_id)
     try:
         result = service.compute_deck_score(deck_id)
-        logger.info("Deck score returned via endpoint: deck_id=%s average_score=%s review_count=%s", result.get("deck_id"), result.get("average_score"), result.get("review_count"))
+        logger.info(
+            "Deck score returned via endpoint: deck_id=%s average_score=%s review_count=%s",
+            result.get("deck_id"),
+            result.get("average_score"),
+            result.get("review_count"),
+        )
         return result
     except Exception:
         logger.exception("Unexpected error in get_deck_score: deck_id=%s", deck_id)

@@ -5,16 +5,23 @@ from app.modules.cards.schemas import CardCreate
 
 logger = logging.getLogger(__name__)
 
-class CardService:
 
+class CardService:
     def __init__(self, repo: CardRepository):
         self.repo = repo
 
     def create_card(self, data: CardCreate):
-        logger.debug("create_card called: deck_id=%s front_present=%s back_present=%s", data.deck_id, bool(data.front), bool(data.back))
+        logger.debug(
+            "create_card called: deck_id=%s front_present=%s back_present=%s",
+            data.deck_id,
+            bool(data.front),
+            bool(data.back),
+        )
         # business rule example (simple but real)
         if not data.front or not data.back:
-            logger.warning("create_card validation failed: missing front/back: deck_id=%s", data.deck_id)
+            logger.warning(
+                "create_card validation failed: missing front/back: deck_id=%s", data.deck_id
+            )
             raise ValueError("Card must have front and back")
 
         try:
@@ -26,7 +33,9 @@ class CardService:
             logger.info("Card created: id=%s deck_id=%s", getattr(card, "id", None), data.deck_id)
             return card
         except Exception:
-            logger.exception("Error creating card for deck_id=%s front=%s", data.deck_id, data.front)
+            logger.exception(
+                "Error creating card for deck_id=%s front=%s", data.deck_id, data.front
+            )
             raise
 
     def get_card(self, card_id: int):
@@ -53,7 +62,7 @@ class CardService:
         except Exception:
             logger.exception("Failed to list cards for deck_id=%s", deck_id)
             raise
-    
+
     def delete_card(self, card_id: int):
         logger.debug("delete_card called: card_id=%s", card_id)
         try:

@@ -7,8 +7,8 @@ from app.modules.reviews.model import Review
 
 logger = logging.getLogger(__name__)
 
-class ReviewRepository:
 
+class ReviewRepository:
     def __init__(self, db: Session):
         self.db = db
         logger.debug("ReviewRepository initialized: Session=%s", type(db))
@@ -20,7 +20,12 @@ class ReviewRepository:
             self.db.add(review)
             self.db.commit()
             self.db.refresh(review)
-            logger.info("Review created: id=%s card_id=%s rating=%s", getattr(review, "id", None), card_id, rating)
+            logger.info(
+                "Review created: id=%s card_id=%s rating=%s",
+                getattr(review, "id", None),
+                card_id,
+                rating,
+            )
             return review
         except Exception:
             logger.exception("Failed to create review for card_id=%s rating=%s", card_id, rating)

@@ -6,8 +6,8 @@ from app.modules.decks.model import Deck
 
 logger = logging.getLogger(__name__)
 
-class DeckRepository:
 
+class DeckRepository:
     def __init__(self, db: Session):
         self.db = db
         logger.debug("DeckRepository initialized: Session=%s", type(db))
