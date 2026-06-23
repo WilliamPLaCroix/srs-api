@@ -24,8 +24,11 @@ jobs:
 
       - run: pip install ruff
 
-      - name: Lint
-        run: ruff check src/
+      - name: Ruff lint
+        run: ruff check src/ --diff
+        
+      - name: Ruff format check
+        run: ruff format --check src/
 
   test:
     runs-on: ubuntu-latest
