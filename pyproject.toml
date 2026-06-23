@@ -3,14 +3,14 @@ name = "app"
 version = "0.1.0"
 requires-python = ">=3.11"
 dependencies = [
-    fastapi,
-    pydantic,
-    uvicorn,
-    SQLAlchemy,
-    psycopg2,
-    testcontainers,
-    pydantic-settings,
-    alembic,
+    "fastapi",
+    "pydantic",
+    "uvicorn",
+    "SQLAlchemy",
+    "psycopg2",
+    "testcontainers",
+    "pydantic-settings",
+    "alembic",
 ]
 
 [project.optional-dependencies]
@@ -45,10 +45,6 @@ addopts = "-q"
 [tool.coverage.run]
 source = ["src/app"]
 branch = true
-
-[tool.coverage.report]
-show_missing = true
-fail_under = 60
 
 [tool.coverage.report]
 show_missing = true
