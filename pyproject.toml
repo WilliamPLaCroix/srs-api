@@ -3,12 +3,12 @@ name = "app"
 version = "0.1.0"
 requires-python = ">=3.11"
 dependencies = [
-    fastapi[standard],
+    fastapi,
     pydantic,
-    uvicorn[standard],
+    uvicorn,
     SQLAlchemy,
     psycopg2,
-    testcontainers[postgres],
+    testcontainers,
     pydantic-settings,
     alembic,
 ]
