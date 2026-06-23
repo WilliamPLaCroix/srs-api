@@ -34,9 +34,9 @@ def create_card(payload: CardCreate, service: CardService = Depends(get_service)
             getattr(card, "deck_id", None),
         )
         return card
-    except ValueError as e:
-        logger.warning("create_card bad request: %s", e)
-        raise HTTPException(status_code=400, detail=str(e))
+    except ValueError as err:
+        logger.warning("create_card bad request: %s", err)
+        raise HTTPException(status_code=400, detail=str(err)) from err
     except Exception as err:
         logger.exception("Unexpected error in create_card")
         raise HTTPException(status_code=500, detail="Internal server error") from err
@@ -49,9 +49,9 @@ def get_card(card_id: int, service: CardService = Depends(get_service)):
         card = service.get_card(card_id)
         logger.info("Card fetched via endpoint: card_id=%s", card_id)
         return card
-    except ValueError as e:
+    except ValueError as err:
         logger.info("get_card not found: card_id=%s", card_id)
-        raise HTTPException(status_code=404, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(err)) from err
     except Exception as err:
         logger.exception("Unexpected error in get_card: card_id=%s", card_id)
         raise HTTPException(status_code=500, detail="Internal server error") from err
@@ -76,9 +76,9 @@ def delete_card(card_id: int, service: CardService = Depends(get_service)):
         service.delete_card(card_id)
         logger.info("Card deleted via endpoint: card_id=%s", card_id)
         return {"detail": "Card deleted"}
-    except ValueError as e:
+    except ValueError as err:
         logger.info("delete_card not found: card_id=%s", card_id)
-        raise HTTPException(status_code=404, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(err)) from err
     except Exception as err:
         logger.exception("Unexpected error deleting card_id=%s", card_id)
         raise HTTPException(status_code=500, detail="Internal server error") from err

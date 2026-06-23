@@ -29,9 +29,9 @@ def create_deck(payload: DeckCreate, service: DeckService = Depends(get_service)
             getattr(deck, "name", None),
         )
         return deck
-    except ValueError as e:
-        logger.warning("create_deck bad request: %s", e)
-        raise HTTPException(status_code=400, detail=str(e))
+    except ValueError as err:
+        logger.warning("create_deck bad request: %s", err)
+        raise HTTPException(status_code=400, detail=str(err)) from err
     except Exception as err:
         logger.exception("Unexpected error in create_deck")
         raise HTTPException(status_code=500, detail="Internal server error") from err
@@ -44,9 +44,9 @@ def get_deck(deck_id: int, service: DeckService = Depends(get_service)):
         deck = service.get_deck(deck_id)
         logger.info("Deck fetched via endpoint: deck_id=%s", deck_id)
         return deck
-    except ValueError as e:
+    except ValueError as err:
         logger.info("get_deck not found: deck_id=%s", deck_id)
-        raise HTTPException(status_code=404, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(err)) from err
     except Exception as err:
         logger.exception("Unexpected error in get_deck: deck_id=%s", deck_id)
         raise HTTPException(status_code=500, detail="Internal server error") from err
@@ -59,9 +59,9 @@ def get_deck_full(deck_id: int, service: DeckService = Depends(get_service)):
         result = service.get_deck_with_cards(deck_id)
         logger.info("Deck with cards returned via endpoint: deck_id=%s", deck_id)
         return result
-    except ValueError as e:
+    except ValueError as err:
         logger.info("get_deck_full not found: deck_id=%s", deck_id)
-        raise HTTPException(status_code=404, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(err)) from err
     except Exception as err:
         logger.exception("Unexpected error in get_deck_full: deck_id=%s", deck_id)
         raise HTTPException(status_code=500, detail="Internal server error") from err
@@ -74,9 +74,9 @@ def delete_deck(deck_id: int, service: DeckService = Depends(get_service)):
         result = service.delete_deck(deck_id)
         logger.info("Deck deleted via endpoint: deck_id=%s", deck_id)
         return result
-    except ValueError as e:
+    except ValueError as err:
         logger.info("delete_deck not found: deck_id=%s", deck_id)
-        raise HTTPException(status_code=404, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(err)) from err
     except Exception as err:
         logger.exception("Unexpected error deleting deck_id=%s", deck_id)
         raise HTTPException(status_code=500, detail="Internal server error") from err

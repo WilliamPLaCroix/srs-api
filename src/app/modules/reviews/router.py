@@ -34,9 +34,9 @@ def create_review(payload: ReviewCreate, service: ReviewService = Depends(get_se
             payload.rating,
         )
         return review
-    except ValueError as e:
-        logger.warning("create_review bad request: %s", e)
-        raise HTTPException(status_code=400, detail=str(e))
+    except ValueError as err:
+        logger.warning("create_review bad request: %s", err)
+        raise HTTPException(status_code=400, detail=str(err)) from err
     except Exception as err:
         logger.exception("Unexpected error in create_review")
         raise HTTPException(status_code=500, detail="Internal server error") from err
