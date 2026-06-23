@@ -1,12 +1,12 @@
+import logging
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from app.db.database import get_db
-
-from app.modules.decks.schemas import DeckCreate, DeckRead, DeckWithCards
+from app.db.session import get_db
 from app.modules.decks.repository import DeckRepository
+from app.modules.decks.schemas import DeckCreate, DeckRead, DeckWithCards
 from app.modules.decks.services import DeckService
-import logging
 
 logger = logging.getLogger(__name__)
 

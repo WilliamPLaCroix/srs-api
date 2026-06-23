@@ -1,7 +1,7 @@
-from sqlalchemy import Integer, ForeignKey, DateTime, func
+from sqlalchemy import DateTime, ForeignKey, Integer, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.db.database import Base
+from app.db.base import Base
 
 
 class Review(Base):

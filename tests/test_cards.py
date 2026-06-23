@@ -1,6 +1,8 @@
 import pytest
 
-from app.db.database import SessionLocal, Base, engine
+from app.db.base import Base
+from app.db.engine import engine
+from app.db.session import SessionLocal
 from app.modules.cards.repository import CardRepository
 from app.modules.cards.services import CardService
 from app.modules.cards.schemas import CardCreate
@@ -15,15 +17,6 @@ def db():
     yield db
     db.close()
     Base.metadata.drop_all(bind=engine)
-
-
-def test_imports():
-    from app.db.database import SessionLocal, Base, engine
-    from app.modules.cards.repository import CardRepository
-    from app.modules.cards.services import CardService
-    from app.modules.cards.schemas import CardCreate
-
-    from app import db  # ensure metadata registered
 
 
 def test_create_card_flow(db):

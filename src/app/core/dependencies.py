@@ -1,14 +1,11 @@
-from sqlalchemy.orm import Session
 from fastapi import Depends
+from sqlalchemy.orm import Session
 
 from app.db.database import get_db
-
 from app.modules.cards.repository import CardRepository
 from app.modules.cards.services import CardService
-
 from app.modules.decks.repository import DeckRepository
 from app.modules.decks.services import DeckService
-
 from app.modules.reviews.repository import ReviewRepository
 from app.modules.reviews.services import ReviewService
 

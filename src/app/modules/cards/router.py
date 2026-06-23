@@ -1,12 +1,12 @@
+import logging
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from app.db.database import get_db
-
-from app.modules.cards.schemas import CardCreate, CardRead
+from app.db.session import get_db
 from app.modules.cards.repository import CardRepository
+from app.modules.cards.schemas import CardCreate, CardRead
 from app.modules.cards.services import CardService
-import logging
 
 logger = logging.getLogger(__name__)
 

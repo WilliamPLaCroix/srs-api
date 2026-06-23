@@ -1,6 +1,8 @@
 import pytest
 
-from app.db.database import SessionLocal, Base, engine
+from app.db.base import Base
+from app.db.session import SessionLocal
+from app.db.engine import engine
 
 from app.modules.cards.repository import CardRepository
 from app.modules.decks.repository import DeckRepository
@@ -16,14 +18,6 @@ def db():
     yield db
     db.close()
     Base.metadata.drop_all(bind=engine)
-
-
-def test_imports():
-    from app.db.database import SessionLocal, Base, engine
-    from app.modules.cards.repository import CardRepository
-    from app.modules.decks.repository import DeckRepository
-    from app.modules.reviews.repository import ReviewRepository
-    from app.modules.reviews.services import ReviewService
 
 
 def test_review_scoring(db):

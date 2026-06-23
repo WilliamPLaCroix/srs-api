@@ -1,5 +1,6 @@
-from app.modules.decks.repository import DeckRepository
 import logging
+
+from app.modules.decks.repository import DeckRepository
 
 logger = logging.getLogger(__name__)
 

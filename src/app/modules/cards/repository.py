@@ -1,7 +1,8 @@
+import logging
+
 from sqlalchemy.orm import Session
 
-from app.modules.cards.model import Card as CardModel
-import logging
+from app.modules.cards.model import Card
 
 logger = logging.getLogger(__name__)
 
@@ -11,10 +12,10 @@ class CardRepository:
         self.db = db
         logger.debug("CardRepository initialized: Session=%s", type(db))
 
-    def create(self, front: str, back: str, deck_id: int) -> CardModel:
+    def create(self, front: str, back: str, deck_id: int) -> Card:
         logger.debug("create called: deck_id=%s front_len=%s back_len=%s", deck_id, len(front) if front else 0, len(back) if back else 0)
         try:
-            card = CardModel(
+            card = Card(
                 front=front,
                 back=back,
                 deck_id=deck_id
@@ -28,10 +29,10 @@ class CardRepository:
             logger.exception("Failed to create card for deck_id=%s", deck_id)
             raise
 
-    def get(self, card_id: int) -> CardModel | None:
+    def get(self, card_id: int) -> Card | None:
         logger.debug("get called: card_id=%s", card_id)
         try:
-            card = self.db.query(CardModel).filter(CardModel.id == card_id).first()
+            card = self.db.query(Card).filter(Card.id == card_id).first()
         except Exception:
             logger.exception("Failed to fetch card_id=%s", card_id)
             raise
@@ -42,12 +43,12 @@ class CardRepository:
             logger.debug("get fetched card: card_id=%s", card_id)
         return card
 
-    def list_by_deck(self, deck_id: int) -> list[CardModel]:
+    def list_by_deck(self, deck_id: int) -> list[Card]:
         logger.debug("list_by_deck called: deck_id=%s", deck_id)
         try:
             results = (
-                self.db.query(CardModel)
-                .filter(CardModel.deck_id == deck_id)
+                self.db.query(Card)
+                .filter(Card.deck_id == deck_id)
                 .all()
             )
             logger.info("list_by_deck found %s cards for deck_id=%s", len(results), deck_id)

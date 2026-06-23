@@ -1,6 +1,7 @@
+import logging
+
 from app.modules.cards.repository import CardRepository
 from app.modules.cards.schemas import CardCreate
-import logging
 
 logger = logging.getLogger(__name__)
 

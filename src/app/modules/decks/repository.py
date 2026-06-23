@@ -1,8 +1,8 @@
+import logging
+
 from sqlalchemy.orm import Session, joinedload
 
-from app.modules.decks.model import Deck as DeckModel
-from app.modules.cards.model import Card as CardModel
-import logging
+from app.modules.decks.model import Deck
 
 logger = logging.getLogger(__name__)
 
@@ -12,10 +12,10 @@ class DeckRepository:
         self.db = db
         logger.debug("DeckRepository initialized: Session=%s", type(db))
 
-    def create(self, name: str) -> DeckModel:
+    def create(self, name: str) -> Deck:
         logger.debug("create called: name=%s", name)
         try:
-            deck = DeckModel(name=name)
+            deck = Deck(name=name)
             self.db.add(deck)
             self.db.commit()
             self.db.refresh(deck)
@@ -25,10 +25,10 @@ class DeckRepository:
             logger.exception("Failed to create deck with name=%s", name)
             raise
 
-    def get(self, deck_id: int) -> DeckModel | None:
+    def get(self, deck_id: int) -> Deck | None:
         logger.debug("get called: deck_id=%s", deck_id)
         try:
-            deck = self.db.query(DeckModel).filter(DeckModel.id == deck_id).first()
+            deck = self.db.query(Deck).filter(Deck.id == deck_id).first()
         except Exception:
             logger.exception("Failed to fetch deck_id=%s", deck_id)
             raise
@@ -39,13 +39,13 @@ class DeckRepository:
             logger.debug("get fetched deck: deck_id=%s", deck_id)
         return deck
 
-    def get_with_cards(self, deck_id: int) -> DeckModel | None:
+    def get_with_cards(self, deck_id: int) -> Deck | None:
         logger.debug("get_with_cards called: deck_id=%s", deck_id)
         try:
             deck = (
-                self.db.query(DeckModel)
-                .options(joinedload(DeckModel.cards))
-                .filter(DeckModel.id == deck_id)
+                self.db.query(Deck)
+                .options(joinedload(Deck.cards))
+                .filter(Deck.id == deck_id)
                 .first()
             )
         except Exception:
@@ -60,7 +60,7 @@ class DeckRepository:
         logger.info("Fetched deck with cards: deck_id=%s card_count=%s", deck_id, card_count)
         return deck
 
-    def delete(self, deck: DeckModel):
+    def delete(self, deck: Deck):
         logger.debug("delete called: deck_id=%s", getattr(deck, "id", None))
         try:
             self.db.delete(deck)

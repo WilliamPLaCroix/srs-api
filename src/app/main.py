@@ -1,19 +1,19 @@
-from fastapi import FastAPI
-from contextlib import asynccontextmanager
-import uvicorn
-import os
 import logging
-from app.core.middleware import RequestContextMiddleware
+from contextlib import asynccontextmanager
 
+import uvicorn
+from fastapi import FastAPI
+
+from app.core.health import router as health_router
+from app.core.logging import setup_logging
+from app.core.middleware import RequestContextMiddleware
 
 # Core
 from app.core.settings import settings
-from app.core.health import router as health_router
-from app.core.logging import setup_logging
+from app.db.base import Base
 
 # Database
-from app.db.database import Base, engine
-from app import db
+from app.db.engine import engine
 
 # Routers (domain-level)
 from app.modules.cards.router import router as cards_router
@@ -21,23 +21,20 @@ from app.modules.decks.router import router as decks_router
 from app.modules.reviews.router import router as reviews_router
 
 
-setup_logging()
-
-logger = logging.getLogger(__name__)
-
-
 # -------------------------------------------------
 # LIFESPAN (startup / shutdown hooks)
 # -------------------------------------------------
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup
+    setup_logging()
+
     Base.metadata.create_all(bind=engine)
 
     yield
 
     # Shutdown (placeholder for now)
     # e.g. close pools, flush queues, etc.
+logger = logging.getLogger(__name__)
 
 
 # -------------------------------------------------

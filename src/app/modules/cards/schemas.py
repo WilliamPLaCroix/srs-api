@@ -1,5 +1,5 @@
-from pydantic import BaseModel, Field, ConfigDict
-from typing import Optional
+
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class CardBase(BaseModel):
@@ -14,8 +14,8 @@ class CardCreate(BaseModel):
 
 
 class CardUpdate(BaseModel):
-    front: Optional[str] = None
-    back: Optional[str] = None
+    front: str | None = None
+    back: str | None = None
 
 
 class CardRead(BaseModel):

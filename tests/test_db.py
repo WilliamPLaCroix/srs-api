@@ -1,7 +1,8 @@
-import pytest
 from sqlalchemy import text
 
-from app.db.database import engine, SessionLocal, get_db, Base
+from app.db.base import Base
+from app.db.engine import engine
+from app.db.session import SessionLocal, get_db
 Base.metadata.create_all(bind=engine)
 
 def test_engine_exists():

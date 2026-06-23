@@ -4,9 +4,7 @@ from alembic import context
 
 from app.core.settings import Settings
 from app.db import Base
-import app.db.models.decks
-import app.db.models.cards
-import app.db.models.reviews
+import app.db.registry
 
 config = context.config
 

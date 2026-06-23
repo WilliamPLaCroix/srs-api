@@ -1,12 +1,12 @@
+import logging
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from app.db.database import get_db
-
-from app.modules.reviews.schemas import ReviewCreate, ReviewRead, DeckScore
+from app.db.session import get_db
 from app.modules.reviews.repository import ReviewRepository
+from app.modules.reviews.schemas import DeckScore, ReviewCreate, ReviewRead
 from app.modules.reviews.services import ReviewService
-import logging
 
 logger = logging.getLogger(__name__)
 
