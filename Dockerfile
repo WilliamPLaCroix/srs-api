@@ -1,42 +1,32 @@
-# Build command (from project root):
-# docker build -t bookwurm .
-
 FROM python:3.13-slim
 
-# Prevent Python from writing .pyc files + ensure logs flush
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
-# Install system dependencies (minimal)
+# system dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
     gcc \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Install dependencies first (better caching)
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Create non-root user
+# create user EARLY (best practice)
 RUN useradd -m appuser
 
-# Copy app
-COPY . .
+# copy code with correct ownership upfront
+COPY --chown=appuser:appuser . .
 
-RUN chown -R appuser:appuser /app
-RUN mkdir -p /app/data && chown -R appuser:appuser /app/data
+# upgrade packaging tools
+RUN pip install --upgrade pip setuptools wheel
 
-# Switch to non-root user
+# install dependencies as root (acceptable for build step)
+RUN pip install -e .
+
+# switch user BEFORE runtime
 USER appuser
 
-# IMPORTANT: ensure src is importable
-ENV PYTHONPATH=src
-
-# Expose port (Render / local convenience)
 EXPOSE 8000
 
-# Start app
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
