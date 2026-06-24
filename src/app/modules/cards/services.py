@@ -1,7 +1,7 @@
 import logging
 
 from app.modules.cards.repository import CardRepository
-from app.modules.cards.schemas import CardCreate
+from app.modules.cards.schemas import CardCreate, CardUpdate
 
 logger = logging.getLogger(__name__)
 
@@ -82,3 +82,39 @@ class CardService:
         except Exception:
             logger.exception("Failed to delete card_id=%s", card_id)
             raise
+
+    def update_card(self, card_id: int, data: CardUpdate):
+        logger.debug(
+            "update_card called: card_id=%s front_present=%s back_present=%s",
+            card_id,
+            bool(getattr(data, "front", None)),
+            bool(getattr(data, "back", None)),
+        )
+
+        # Require at least one field to update
+        if getattr(data, "front", None) is None and getattr(data, "back", None) is None:
+            logger.warning("update_card called with no updatable fields: card_id=%s", card_id)
+            raise ValueError("No fields to update")
+
+        try:
+            front = (
+                data.front.strip()
+                if (getattr(data, "front", None) is not None and data.front is not None)
+                else None
+            )
+            back = (
+                data.back.strip()
+                if (getattr(data, "back", None) is not None and data.back is not None)
+                else None
+            )
+            card = self.repo.update(card_id, front=front, back=back)
+        except Exception:
+            logger.exception("Failed to update card_id=%s", card_id)
+            raise
+
+        if not card:
+            logger.info("Card not found for update: card_id=%s", card_id)
+            raise ValueError("Card not found")
+
+        logger.info("Card updated: card_id=%s", card_id)
+        return card

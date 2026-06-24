@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from app.core.dependencies import get_card_service
 from app.db.session import get_session
-from app.modules.cards.schemas import CardCreate, CardRead
+from app.modules.cards.schemas import CardCreate, CardRead, CardUpdate
 
 logger = logging.getLogger(__name__)
 
@@ -79,4 +79,29 @@ def delete_card(card_id: int, session: Session = Depends(get_session)):  # noqa:
         raise HTTPException(status_code=404, detail=str(err)) from err
     except Exception as err:
         logger.exception("Unexpected error deleting card_id=%s", card_id)
+        raise HTTPException(status_code=500, detail="Internal server error") from err
+
+
+@router.patch("/{card_id}", response_model=CardRead)
+def patch_card(card_id: int, payload: CardUpdate, session: Session = Depends(get_session)):  # noqa: B008
+    logger.debug(
+        "patch_card endpoint called: card_id=%s front_present=%s back_present=%s",
+        card_id,
+        bool(getattr(payload, "front", None)),
+        bool(getattr(payload, "back", None)),
+    )
+    service = get_card_service(session)
+    try:
+        card = service.update_card(card_id, payload)
+        logger.info("Card updated via endpoint: id=%s", getattr(card, "id", None))
+        return card
+    except ValueError as err:
+        logger.info("patch_card not found or bad request: %s", err)
+        # Map validation/no-fields to 400, not-found to 404. Service raises ValueError for both
+        msg = str(err)
+        if "No fields to update" in msg:
+            raise HTTPException(status_code=400, detail=msg) from err
+        raise HTTPException(status_code=404, detail=msg) from err
+    except Exception as err:
+        logger.exception("Unexpected error in patch_card: card_id=%s", card_id)
         raise HTTPException(status_code=500, detail="Internal server error") from err

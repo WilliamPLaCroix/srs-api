@@ -73,3 +73,35 @@ class CardRepository:
         except Exception:
             logger.exception("Failed to delete card_id=%s", card_id)
             raise
+
+    def update(self, card_id: int, front: str | None = None, back: str | None = None):
+        logger.debug(
+            "update called: card_id=%s front_present=%s back_present=%s",
+            card_id,
+            bool(front),
+            bool(back),
+        )
+        try:
+            card = self.get(card_id)
+        except Exception:
+            logger.exception("Failed to fetch card before update: card_id=%s", card_id)
+            raise
+
+        if not card:
+            logger.info("Attempted to update non-existent card: card_id=%s", card_id)
+            return None
+
+        if front is not None:
+            card.front = front
+        if back is not None:
+            card.back = back
+
+        try:
+            self.db.add(card)
+            self.db.commit()
+            self.db.refresh(card)
+            logger.info("Updated card: card_id=%s", card_id)
+            return card
+        except Exception:
+            logger.exception("Failed to update card_id=%s", card_id)
+            raise
