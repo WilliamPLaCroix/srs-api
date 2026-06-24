@@ -38,3 +38,20 @@ def override_get_db():
 
 
 app.dependency_overrides[get_session] = override_get_db
+
+
+@pytest.fixture(autouse=True)
+def clear_db_between_tests():
+    """Ensure each test starts with an empty database by deleting all rows
+    from every table. This keeps tests isolated when using the shared in-memory
+    engine with StaticPool."""
+    db = TestingSessionLocal()
+    try:
+        # Delete rows from all tables in reverse dependency order
+        for table in reversed(Base.metadata.sorted_tables):
+            db.execute(table.delete())
+        db.commit()
+    finally:
+        db.close()
+    yield
+    # No-op after test; the next test will run the same cleanup before it starts
