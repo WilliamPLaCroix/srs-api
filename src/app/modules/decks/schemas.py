@@ -16,3 +16,7 @@ class DeckWithCards(BaseModel):
     id: int
     name: str
     cards: list[dict]
+
+
+class DeckUpdate(BaseModel):
+    name: str | None = None

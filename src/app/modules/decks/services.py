@@ -86,3 +86,23 @@ class DeckService:
         except Exception:
             logger.exception("Failed to delete deck_id=%s", deck_id)
             raise
+
+    def update_deck(self, deck_id: int, name: str | None = None):
+        logger.debug("update_deck called: deck_id=%s name_present=%s", deck_id, bool(name))
+
+        if name is None:
+            logger.warning("update_deck called with no fields: deck_id=%s", deck_id)
+            raise ValueError("No fields to update")
+
+        try:
+            deck = self.repo.update(deck_id, name=name.strip())
+        except Exception:
+            logger.exception("Failed to update deck_id=%s", deck_id)
+            raise
+
+        if not deck:
+            logger.info("Deck not found for update: deck_id=%s", deck_id)
+            raise ValueError("Deck not found")
+
+        logger.info("Deck updated: deck_id=%s name=%s", deck_id, getattr(deck, "name", None))
+        return deck

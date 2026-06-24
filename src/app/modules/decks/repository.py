@@ -69,3 +69,28 @@ class DeckRepository:
         except Exception:
             logger.exception("Failed to delete deck_id=%s", getattr(deck, "id", None))
             raise
+
+    def update(self, deck_id: int, name: str | None = None) -> Deck | None:
+        logger.debug("update called: deck_id=%s name_present=%s", deck_id, bool(name))
+        try:
+            deck = self.get(deck_id)
+        except Exception:
+            logger.exception("Failed to fetch deck before update: deck_id=%s", deck_id)
+            raise
+
+        if not deck:
+            logger.info("Attempted to update non-existent deck: deck_id=%s", deck_id)
+            return None
+
+        if name is not None:
+            deck.name = name
+
+        try:
+            self.db.add(deck)
+            self.db.commit()
+            self.db.refresh(deck)
+            logger.info("Updated deck: deck_id=%s", getattr(deck, "id", None))
+            return deck
+        except Exception:
+            logger.exception("Failed to update deck_id=%s", deck_id)
+            raise

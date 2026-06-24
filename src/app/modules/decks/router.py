@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from app.core.dependencies import get_deck_service
 from app.db.session import get_session
-from app.modules.decks.schemas import DeckCreate, DeckRead, DeckWithCards
+from app.modules.decks.schemas import DeckCreate, DeckRead, DeckUpdate, DeckWithCards
 
 logger = logging.getLogger(__name__)
 
@@ -77,4 +77,27 @@ def delete_deck(deck_id: int, session: Session = Depends(get_session)):  # noqa:
         raise HTTPException(status_code=404, detail=str(err)) from err
     except Exception as err:
         logger.exception("Unexpected error deleting deck_id=%s", deck_id)
+        raise HTTPException(status_code=500, detail="Internal server error") from err
+
+
+@router.patch("/{deck_id}", response_model=DeckRead)
+def patch_deck(deck_id: int, payload: DeckUpdate, session: Session = Depends(get_session)):  # noqa: B008
+    logger.debug(
+        "patch_deck endpoint called: deck_id=%s name_present=%s",
+        deck_id,
+        bool(getattr(payload, "name", None)),
+    )
+    service = get_deck_service(session)
+    try:
+        deck = service.update_deck(deck_id, getattr(payload, "name", None))
+        logger.info("Deck updated via endpoint: id=%s", getattr(deck, "id", None))
+        return deck
+    except ValueError as err:
+        logger.info("patch_deck bad request or not found: %s", err)
+        msg = str(err)
+        if "No fields to update" in msg:
+            raise HTTPException(status_code=400, detail=msg) from err
+        raise HTTPException(status_code=404, detail=msg) from err
+    except Exception as err:
+        logger.exception("Unexpected error in patch_deck: deck_id=%s", deck_id)
         raise HTTPException(status_code=500, detail="Internal server error") from err
