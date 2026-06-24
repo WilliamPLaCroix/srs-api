@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from app.core.dependencies import get_review_service
 from app.db.session import get_session
-from app.modules.reviews.schemas import DeckScore, ReviewCreate, ReviewRead
+from app.modules.reviews.schemas import CardScore, DeckScore, ReviewCreate, ReviewRead
 
 logger = logging.getLogger(__name__)
 
@@ -52,4 +52,22 @@ def get_deck_score(deck_id: int, session: Session = Depends(get_session)):  # no
         return result
     except Exception as err:
         logger.exception("Unexpected error in get_deck_score: deck_id=%s", deck_id)
+        raise HTTPException(status_code=500, detail="Internal server error") from err
+
+
+@router.get("/card/{card_id}", response_model=CardScore)
+def get_card_score(card_id: int, session: Session = Depends(get_session)):  # noqa: B008
+    logger.debug("get_card_score endpoint called: card_id=%s", card_id)
+    service = get_review_service(session)
+    try:
+        result = service.compute_card_score(card_id)
+        logger.info(
+            "Card score returned via endpoint: card_id=%s average_score=%s review_count=%s",
+            result.get("card_id"),
+            result.get("average_score"),
+            result.get("review_count"),
+        )
+        return result
+    except Exception as err:
+        logger.exception("Unexpected error in get_card_score: card_id=%s", card_id)
         raise HTTPException(status_code=500, detail="Internal server error") from err

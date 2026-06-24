@@ -64,3 +64,13 @@ class ReviewRepository:
         except Exception:
             logger.exception("Failed to delete reviews for deck_id=%s", deck_id)
             raise
+
+    def get_by_card(self, card_id: int) -> list[Review]:
+        logger.debug("get_by_card called: card_id=%s", card_id)
+        try:
+            reviews = self.db.query(Review).filter(Review.card_id == card_id).all()
+            logger.info("get_by_card found %s reviews for card_id=%s", len(reviews), card_id)
+            return reviews
+        except Exception:
+            logger.exception("Failed to fetch reviews for card_id=%s", card_id)
+            raise

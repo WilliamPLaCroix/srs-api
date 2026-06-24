@@ -58,6 +58,30 @@ class ReviewService:
 
         return {"deck_id": deck_id, "average_score": average, "review_count": count}
 
+    def compute_card_score(self, card_id: int):
+        logger.debug("compute_card_score called: card_id=%s", card_id)
+        try:
+            reviews = self.repo.get_by_card(card_id)
+        except Exception:
+            logger.exception("Failed to fetch reviews for card_id=%s", card_id)
+            raise
+
+        if not reviews:
+            logger.info("No reviews found for card_id=%s; returning zeroed score", card_id)
+            return {"card_id": card_id, "average_score": 0.0, "review_count": 0}
+
+        scores = [r.rating for r in reviews]
+        average = round(mean(scores), 2)
+        count = len(scores)
+        logger.info(
+            "Computed card score: card_id=%s average_score=%s review_count=%s",
+            card_id,
+            average,
+            count,
+        )
+
+        return {"card_id": card_id, "average_score": average, "review_count": count}
+
     def delete_deck_reviews(self, deck_id: int):
         logger.debug("delete_deck_reviews called: deck_id=%s", deck_id)
         try:

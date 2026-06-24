@@ -18,3 +18,9 @@ class DeckScore(BaseModel):
     deck_id: int
     average_score: float
     review_count: int
+
+
+class CardScore(BaseModel):
+    card_id: int
+    average_score: float
+    review_count: int
