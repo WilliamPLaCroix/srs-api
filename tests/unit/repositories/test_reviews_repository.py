@@ -4,7 +4,7 @@ from app.modules.cards.model import Card
 from app.modules.cards.repository import CardRepository
 from app.modules.decks.model import Deck
 from app.modules.decks.repository import DeckRepository
-from app.modules.reviews.model import Review
+from app.modules.reviews.model import ReviewLog
 from app.modules.reviews.repository import ReviewRepository
 from tests.conftest import TestingSessionLocal
 
@@ -14,7 +14,7 @@ def db():
     db = TestingSessionLocal()
     yield db
     # cleanup
-    db.query(Review).delete()
+    db.query(ReviewLog).delete()
     db.query(Card).delete()
     db.query(Deck).delete()
     db.commit()
